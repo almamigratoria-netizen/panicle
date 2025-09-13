@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<base target="_top">
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <title>Get a Bus Route</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/json5/2.2.3/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/osmtogeojson@3.0.0-beta.5/osmtogeojson.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+	  <style>
+		    html, body {
+			      height: 100%;
+			      margin: 0;
+		    }
+		    #map{
+			      height: 100%;
+			      width: 100%;
+		    }
+	  </style>
+  </head>
+  <body>
+    <div id="map"> </div>
+    <script src="../libs/leaflet/dist/leaflet.js"></script>
+    <script>
+        async function process(map) {
+          // show spinner, maybe iziToast
+          // fetch the route
+          const ci = document.getElementById('controlinput');
+          const relation = ci.value;
+          console.log("Fetching data ...");
+          const overpassURL = "https://overpass-api.de/api/interpreter";
+          let query = "[out:json][timeout:45];\n";
+          // 9644636 should be route 38
+          query = query + "( relation(" + controlinput.value 
+          query = query + "); >>;);\n"
+          query = query + "out geom; >;\n"
+          query = query + "out skel qt;\n"
+          // console.log("query = ", query);
+          const fetch_opts = {
+            method: "POST",
+            body: "data=" + encodeURIComponent(query),
+          };
+          // FIXME:  try/catch here in case connection times out
+          //         or some API error throws a 400 or something.
+          let result;
+          try {
+              result = await fetch(overpassURL, fetch_opts); 
+          } catch(e) {
+              console.error("Fetch error: ", e);
+              debug;
+          }
+          if (!result.ok) {
+            // iziToast (tell them to see the console) //
+            console.log("Error: ", result);
+            console.log(await result.text())
+          }
+          let data = await result.text();
+          let j;
+          try {
+            j = JSON5.parse(data);
+          } catch (e) {
+            console.log("Response is not valid JSON, apparently");
+            console.log(e);
+          }
+          console.log("...Success");
+
+          // Pass the data through osmtogeojson
+          console.log("Converting from OSM format to geoJSON");
+          let t = osmtogeojson(j);
+          // console.log(t.features.length, " features");
+          // console.log("Rough size: ", JSON.stringify(t).length);
+          // console.log(JSON5.stringify(t, null, 2));
+          <!-- maybe iziToast processing stage updates -->
+
+          // Remove points, just leave the lines
+          // We're on a bus, not driving, so we don't care about
+          // speed bumps and traffic lights.
+          console.log("Filtering...");
+          const filtered = t.features.filter(feature => feature.geometry.type !== 'Point');
+          const updated = { ...t, features: filtered };
+          function stripProps(fc) {
+            const newFC = JSON.parse(JSON.stringify(fc));
+            newFC.features.forEach(feature => {
+              if (feature.properties) {
+                const id = feature.properties.id; // Store the 'id' property
+                feature.properties = {}; // Reset the properties object
+                if (id !== undefined) {
+                  feature.properties.id = id; // Add 'id' back if it existed
+                }
+              }
+            });
+            return newFC;
+          }
+          const stripped = stripProps(updated);
+          console.log("Rough size of stripped: ", JSON.stringify(stripped).length);
+
+          // Simplify the linestrings we can.  Would be better
+          // if we could dissolve the multilinestring first, but
+          // there are no simple browser libs for that and I don't
+          // want to write one for a project this trivial.
+          const s_opts = {
+            // about 1 meter, give or take
+            tolerance: 0.00001,
+            highQuality: false,
+          };
+          const simple = turf.simplify(stripped, s_opts); 
+          console.log(simple.features.length, " features");
+          console.log("Rough size: ", JSON.stringify(simple).length);
+
+
+          <!-- remove spinner -->
+          //const geoJsonLayer = L.geoJSON(updated);
+          const geoJsonLayer = L.geoJSON(simple);
+          let bounds = geoJsonLayer.getBounds();
+          map.fitBounds(bounds);
+          geoJsonLayer.addTo(map);
+          <!-- display download links (geojson, encoded polyline) -->
+
+          // Create and display download links
+          const el = document.getElementById("controlButton");
+          el.textContent = "Download";
+          el.addEventListener('click', function() {
+            const data = simple;
+            const filename = `${relation}.json`;
+            const jsonString = JSON.stringify(simple, null, 2);
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a); // Append to body temporarily
+            a.click(); // Programmatically click the link to trigger download
+            document.body.removeChild(a); // Clean up the temporary link
+            URL.revokeObjectURL(url); // Release the object URL
+            el.textContent = "Process it!";
+          });
+
+          // Encode it.  Would be REALLY better if we could dissolve
+          // it first.  All we want is one encoded string...
+          // <sigh>  I really don't want to have to write a dissolver.
+          // We might be able to go quick and dirty and just [cringe]
+          // assume that OSM provides clean, ordered line segments.
+          // Maybe we'll hold off on this unless we get a sponsor.
+        };
+
+        // Add a quick and dirty control
+        const CustomInputControl = L.Control.extend({
+          onAdd: function(map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom icdiv');
+            L.DomEvent.disableClickPropagation(container);
+            container.style.backgroundColor = "light-gray";
+            let l = document.createElement("label");
+            l.setAttribute('for', "controlinput");
+            l.textContent = "Relation: ";
+            container.appendChild(l);
+            l = document.createElement("input");
+            l.setAttribute("type", "text");
+            l.id = "controlinput";
+            l.style.width ="200px";
+            container.appendChild(l);
+            l = document.createElement("button");
+            l.setAttribute("type", "button");
+            l.setAttribute("onclick", "process(map)");
+            l.setAttribute("id", "controlButton");
+            l.textContent = "Process it!";
+            container.appendChild(l);
+            return container;
+          },
+
+          onRemove: function(map) {
+              // Nothing to do here
+          }
+        });
+
+	      const map = L.map('map').setView([-25.29,-57.62], 13.5);
+        const OSMUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const osm_link = document.createElement('a');
+        osm_link.href = "https://www.openstreetmap.org/copyright";
+        osm_link.textContent = "Map data © OpenStreetMap";
+        const map_options = {
+          maxZoom: 19,
+		      attribution: osm_link.outerHTML,
+        };
+	      const tiles = L.tileLayer(OSMUrl, map_options).addTo(map);
+        new CustomInputControl({ position: 'topright' }).addTo(map);
+    </script>
+  </body>
+</html>
+
+
+

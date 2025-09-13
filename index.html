@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>BootLeaf</title>
+
+    <link rel="stylesheet" href="libs/bootstrap/bootstrap.min.css">
+    <!-- We do not actually use font-awesome.  Maybe pick Bootstrap Icons
+         ... or use SVG's.  That seems to be the new black.
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
+    -->
+    <link rel="stylesheet" href="libs/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="libs/webfonts/css/font-awesome.css">
+    <link rel="stylesheet" href="libs/webfonts/css/boxicons.css">
+    <link rel="stylesheet" href="libs/Leaflet-ExtraMarkers/css/leaflet.extra-markers.min.css">
+    <!-- FIXME:  MarkerCluster from leaflet plugins, not mapbox
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css">
+    -->
+    <!--
+    <link rel="stylesheet" href="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css">
+    -->
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style> 
+      html { height: 100%; }
+      body { height: 100%; }
+      main { height: 100%; }
+      #map { 
+        height: 100%; 
+        padding: 0px 0px 0px 0px; 
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" 
+           href="#"
+           id="navbar_logo">Navbar
+        </a>
+        <button class="navbar-toggler" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#navbarSupportedContent" 
+                aria-controls="navbarSupportedContent" 
+                aria-expanded="false" 
+                aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- THings menu-worthy:
+               About
+               Publish with us
+               Forum
+               Advanced Search
+          -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle"
+                 href="#" role="button"
+                 data-bs-toggle="dropdown">Links
+              </a>
+              <ul class="dropdown-menu" id='links_dropdown'>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" 
+                 href="#" 
+                 role="button" 
+                 data-bs-toggle="dropdown" 
+                 aria-expanded="false"> Dropdown
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="#">Action</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Another action</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link">About</a>
+            </li>
+          </ul>
+          <!-- ROADMAP: Maybe a microphone icon so we can voice search -->
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" 
+                   type="search" 
+                   placeholder="Search" 
+                   name="searchbox" 
+                   aria-label="Search"/>
+            <button class="btn btn-outline-success" 
+                    type="submit">Search
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!-- FIXME:  Figure out why we need this fixed padding.
+                 Everything should flow correctly -->
+    <main class="flex" style="margin: none; padding: 70px 0px 0px 0px !important; height: 100%;">
+      <div class="col-12" id="map">
+      </div>
+    </main>
+
+    <script src="libs/bootstrap/bootstrap.bundle.min.js"></script>
+    <!-- FIXME:  Use same basic idea as BootLeaf, but
+                 replace typeahead with awesomecomplete.
+                 No JQuery dependancy, more recent commits for
+                 included libs (like list.js, etc) 
+    -->
+    <script src="./libs/leaflet/dist/leaflet.js"></script>
+    <script src="./libs/leaflet-sidebar-v2/js/leaflet-sidebar.js"></script>
+    <!--
+      Need leaflet plugins:
+          leaflet-markercluster
+          leaflet.Photo
+          ... what's that groupedlayercontrol buy us that the regular
+              layer control doesn't?
+    -->
+    <script src="libs/json5/json5.min.js"></script>
+    <script type="module" src="panicle.js"></script>
+    <script src="libs/Leaflet-ExtraMarkers/js/leaflet.extra-markers.js"></script>
+  </body>
+</html>

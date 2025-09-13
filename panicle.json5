@@ -1,0 +1,81 @@
+//
+// Panicle.json
+//
+// For details about this file, see README.md
+//
+// This file is JSON5, which means you can have comments.
+ 
+{
+    // Set the page title (pretty meaningless, but a nice touch)
+    Title: "Panicle Demo Page",
+    // This is what shows on the page's navbar
+    Logo:  "Panicle",
+    // Center of the map.  Out default is Asuncion, Paraguay
+    Center: [ 25.2878, -57.633],
+    CenterMarker: {
+        // Focus of this map
+    }
+    // These data files get loaded in and parsed to populate the map
+    // For details on the options, see ./data/README.md
+    Data: {
+      Pizza: "data/pizza.json",
+      Burgers: "data/burgers.json",
+      SuperMarkets: "data/supers.json"
+    },
+    GeoJSON: {
+      "Bus #38":  {
+        style: {
+          color: "#ff7800",
+          weight: 5,
+          opacity: 0.7,
+	},
+	file: "./data/bus_routes/Bus-38.json",
+      },
+      "Bus 2y7 (Botanico)":  {
+        style: {
+          color: "#000077",
+          weight: 5,
+          opacity: 0.7,
+	},
+	file: "./data/bus_routes/Bus-2y7.json",
+      },
+      "Bus 30 (delSol)":  {
+        style: {
+          color: "#0000ff",
+          weight: 5,
+          opacity: 0.7,
+	},
+	file: "./data/bus_routes/Bus-30.json",
+      },
+      "Bus 5":  {
+        style: {
+          color: "#077000",
+          weight: 5,
+          opacity: 0.7,
+	},
+	file: "./data/bus_routes/Bus-5.json",
+      },
+    },
+    // These become the items on the dropdown titled "Links" on the navbar
+    // ROADMAP:  If you don't have any links, links doesn't show on navbar
+    Links: {
+      // "What we display on the menu": {
+      //     url: {url of the link},
+      //     tooltip: {OPTIONAL: what shows up if you hover over the link}
+      //}
+      "Panicle on Github": {
+        url: "https://github.com/frozengeek/panicle",
+	tooltip: "I'm a hoopy frood"
+      },
+      "Example.com": {
+        url: "https://www.example.com"
+      },
+      // Sorry, but I got paid (in trade) to include this link
+      "What to do in Asuncion": {
+          url: "https://hot.com.py",
+	  tooltip: "Paid Advertisement",
+      }
+    }
+}
+// ROADMAP:  Voice: true/false 1/0 whatever
+
