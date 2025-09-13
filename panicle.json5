@@ -11,10 +11,10 @@
     // This is what shows on the page's navbar
     Logo:  "Panicle",
     // Center of the map.  Out default is Asuncion, Paraguay
-    Center: [ 25.2878, -57.633],
+    Center: [ -25.2878, -57.633],
     CenterMarker: {
         // Focus of this map
-    }
+    },
     // These data files get loaded in and parsed to populate the map
     // For details on the options, see ./data/README.md
     Data: {
