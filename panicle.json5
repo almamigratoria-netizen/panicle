@@ -77,7 +77,7 @@
       //     tooltip: {OPTIONAL: what shows up if you hover over the link}
       //}
       "Panicle on Github": {
-        url: "https://github.com/frozengeek/panicle",
+        url: "https://github.com/almamigratoria-netizen/panicle",
 	tooltip: "I'm a hoopy frood",
       },
       "Example.com": {
