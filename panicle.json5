@@ -26,8 +26,8 @@
       "Bus #38":  {
         style: {
           color: "#ff7800",
-          weight: 5,
-          opacity: 0.7,
+          weight: 4,
+          opacity: 0.8,
 	},
 	file: "./data/bus_routes/Bus-38.json",
       },
@@ -54,6 +54,14 @@
           opacity: 0.7,
 	},
 	file: "./data/bus_routes/Bus-5.json",
+      },
+      "Bus 15 (Shopping Mariscal)":  {
+        style: {
+          color: "yellow",
+          weight: 5,
+          opacity: 0.7,
+	},
+	file: "./data/bus_routes/Bus-15-3.json",
       },
     },
     // These become the items on the dropdown titled "Links" on the navbar
