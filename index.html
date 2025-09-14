@@ -57,12 +57,6 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <!-- THings menu-worthy:
-               About
-               Publish with us
-               Forum
-               Advanced Search
-          -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle"
@@ -70,6 +64,7 @@
                  data-bs-toggle="dropdown">Links
               </a>
               <ul class="dropdown-menu" id='links_dropdown'>
+                // Links get filled in when we parse the config file
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -77,25 +72,34 @@
                  href="#" 
                  role="button" 
                  data-bs-toggle="dropdown" 
-                 aria-expanded="false"> Dropdown
+                 aria-expanded="false"> Info 
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" href="#">Action</a>
+                  <span class="dropdown-item" 
+                        id="item1">
+                    Action
+                  </span>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">Another action</a>
+                  <span class="dropdown-item" 
+                        id="item2">
+                    Another action
+                  </span>
                 </li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
+                  <span class="dropdown-item" 
+                     id="item3" >
+                       Something else here
+                  </span>
                 </li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link">About</a>
+              <span class="nav-link" id="about">About</span>
             </li>
           </ul>
           <!-- ROADMAP: Maybe a microphone icon so we can voice search -->
@@ -106,6 +110,7 @@
                    name="searchbox" 
                    aria-label="Search"/>
             <button class="btn btn-outline-success" 
+                    id="searchbutton"
                     type="submit">Search
             </button>
           </form>
@@ -121,11 +126,6 @@
     </main>
 
     <script src="libs/bootstrap/bootstrap.bundle.min.js"></script>
-    <!-- FIXME:  Use same basic idea as BootLeaf, but
-                 replace typeahead with awesomecomplete.
-                 No JQuery dependancy, more recent commits for
-                 included libs (like list.js, etc) 
-    -->
     <script src="./libs/leaflet/dist/leaflet.js"></script>
     <script src="./libs/leaflet-sidebar-v2/js/leaflet-sidebar.js"></script>
     <!--

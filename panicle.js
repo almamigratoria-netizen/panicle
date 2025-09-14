@@ -15,6 +15,7 @@
 // This works, but we might want to tweak it a bit.
 // import config from "./config.js";
 // console.log("back from config.js: ", config);
+import navbar from "./navbar.js";
 
 // As written, this function throws error.  We might want to catch
 // them internally so this will be easier to put in a module.
@@ -218,7 +219,7 @@ async function Load_Map() {
         lat = config.Center[0];
         lon = config.Center[1];
     }
-    map.setView([lat, lon],14);
+    map.setView([lat, lon], 15);
 
     // Config might want a list of map layers
     const OSMUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -283,7 +284,6 @@ marker.addTo(map);
 
 // Also check out this one:  Has some advantages over BootLeaf
 // https://8to5developer.github.io/leaflet-custom-searchbox/
-
 
 // Also if we create controls, think about this:
 // Eliminates the need for a separate CSS file, but still makes

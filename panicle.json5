@@ -6,6 +6,11 @@
 // This file is JSON5, which means you can have comments.
  
 {
+    // I think the less an end-user has to edit the HTML, the
+    // easier it'll be for them.  This isn't intended for web developers, 
+    // it's intended for Average Joe who just wants to throw up a map
+    // of what's in the neighborhood.
+    //
     // Set the page title (pretty meaningless, but a nice touch)
     Title: "Panicle Demo Page",
     // This is what shows on the page's navbar
@@ -73,16 +78,12 @@
       //}
       "Panicle on Github": {
         url: "https://github.com/frozengeek/panicle",
-	tooltip: "I'm a hoopy frood"
+	tooltip: "I'm a hoopy frood",
       },
       "Example.com": {
-        url: "https://www.example.com"
+        url: "https://www.example.com",
+	tooltip: "I really know where my towel is",
       },
-      // Sorry, but I got paid (in trade) to include this link
-      "What to do in Asuncion": {
-          url: "https://hot.com.py",
-	  tooltip: "Paid Advertisement",
-      }
     }
 }
 // ROADMAP:  Voice: true/false 1/0 whatever
