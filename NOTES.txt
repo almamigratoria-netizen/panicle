@@ -1,27 +1,3 @@
-Based on BootLeaf, but updated to newer leaflet and bootstrap, 
-elimination of dependancy on jquery, removes typeahead (not updated
-for several years) in favor of a newer library, eliminate dependancy
-on mapbox plugins (only use "official" plugins from leaflet).
-
-Might be nice to make it oh-s--portable by sucking in a JSON file:
-Center: [lat: {lat}, lng: {lng} ],
-Data: [
-    Pizza: pizza.json,
-    Burgers: burgers.json,
-    Supermarkets: supers.json,
-],
-Title: Title for loaded page,
-Logo: {
-    Text: {text},
-    Icon: {icon.png},
-}
-
-
-Includes data for pizzas and hamburgers in Asuncion, Paraguay.
-Include notes on how to customize (location, theme, data)
-
-So I've forgotten a bit about javascript modules, but this will be a great
-exercise.
 
 Hmmm... maybe add a voice interface (show a microphone icon, press it and) say
 "tetonas" or "rubias", or "san lorenzo"
@@ -79,23 +55,6 @@ const search = (event, objectData = [], setReturnedData, combinations = []) => {
 
 export default search;
 =========================================
-Getting Bus Routes:
-OpenStreetMap with public transport layer (?layers=T or something)
-Pick a bus route.
-Get the OSRM id (or whatever it's called) of the route 
-Figure out the primary bus routes we want to have on hand.
-Need to go to:
-Villa Mora, Terminal, Botanical, FDO Norte, FDO Sur, maybe a couple others.
-From Hostel to Obrero, Sajonia, etc (supermarkets)
-Parks, cofee shops...
-
-Go to overpass-turbo.eu and export the route as JSON
-Take the JSON and use osmtogeojson (on github) to export geoJSON.
-Maybe use simplify.js to reduce the points count if it's from a shaky
-GPS route or something.
-
-SO just get the dozen most useful bus routes
-(38, 12, 23...) and not the million we'll never use.
 
 Show these on the map?  Can we put a dropdown in the layer selector?
 Or collapse groups?
@@ -114,32 +73,6 @@ Maybe also add json5 mime type, but maybe not.
         }
 
 ========================================================
-Workflow for getting bus route
-Go to OpenStreetMap.  Select transport layer.
-"Query Features" and click the route you want
-Sort through the list.  You're looking for a "Relation" that
-hopefully is named with your bus route's name.
-Note the relation number
 
-IN the overpass-turbo.eu editor, make your query look like this:
-[out:json][timeout:25];
-// gather results
-(
-  // substitute the id the relation(e.g. route) that you want to query
-  relation(9644636); >>;
-);
-// print results
-out geom;
->;
-out skel qt;
 
-Where the "relation()" is filled in with your relation number.
-
-hmmm... there seems to be a way to directly download the data using an API 
-(maybe POST the query).  We could run through a processor like osm2geojson,
-then load the geojson and strip all the "points" (removing traffic
-lights and intersections).  Then maybe look at some linestring compression
-(simplify.js, but probably not very necessary) and google polyline encoding to save bandwidth (if the 
-geogjon looks to be large).
- 
 

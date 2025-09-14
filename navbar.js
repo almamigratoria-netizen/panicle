@@ -21,13 +21,27 @@ const navbar = (function() {
         if (el) { el.addEventListener("click", searchbutton); }
         el = document.getElementById("about");
         if (el) { el.addEventListener("click", about); }
+        // This version of Bootstrap seems to have a bug that
+        // raises aria issues.  This calms them down.  Probably will
+        // get fixed in a future Bootstrap release, but for now....
+        window.addEventListener('hide.bs.modal', () => {
+            if (document.activeElement instanceof HTMLElement) {
+                document.activeElement.blur();
+            }
+        }); 
     };
 
     // The argument "e" (the event) gets supplied automagically
-    // Unless you're calling the function yourself, for some reason.
+    // Unless you're calling the function yourself (for some reason).
     const item1 = function(e) {
         if (!e.target) {return;}
-        console.log(e.target.textContent.trim(), " clicked")
+        try {
+            const el = document.getElementById("modal_1");
+            const m = bootstrap.Modal.getOrCreateInstance(el);
+            m.show();
+        } catch(e) {
+            console.log(e);
+        }
     };
 
     const item2 = function(e) {
@@ -56,7 +70,7 @@ const navbar = (function() {
         item1: item1,
         item2: item2,
         item3: item3,
-        searcbutton: searchbutton,
+        searchbutton: searchbutton,
     };
 })();
 

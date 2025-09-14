@@ -1,47 +1,82 @@
-// OK, it says Burgers, but it's really places to eat
-// in easy walking distance to Patagonia Hostel
-// Not including fancy, expensive restaurants because people
-// who eat at places like that stay at hotels, not hostels.
+// 
+// Burger places near Hostel Patagonia in Asuncion, Paraguay
 
-// THIS FILE IS A MESS.  I NEED TWO FILES, I SUPPOSE.
-// ONE FOR THE DEMO, ONE FOR HOSTAL PATAGONIA
-//
-// Talk to Horacio.  We can post this to a GitHub page, create a QR.
-// Post the QR in the lobby, on the doors, etc.  No need to buy a domain,
-// pay for hosting... nothing.  But if he wants, I'll walk him through 
-// getting a domain and a VPS.
-//
-// We want burger, we want pizza.  Those are our examples files.
-//
-// NOTE:  The key is optional.  Can be over-ridden by the name.
 {
   "Lomitos CLARI": {
+    marker: {
+      icon: 'bx-burger-alt',
+      markerColor: 'blue',
+      shape: 'circle',
+      prefix: 'bx,'
+    },
     Location: [-25.286437,-57.630938],
     Link: "https://www.instagram.com/lomitos_clari/"
   },
   "El Bodegon": {
+    marker: {
+      icon: 'bx-burger-alt',
+      markerColor: 'blue',
+      shape: 'circle',
+      prefix: 'bx,'
+    },
     Location: [-25.282438,-57.634187],
     Link: "https://www.instagram.com/elbodegon_paraguay" 
   },
   "Bar El Tauro": {
+    marker: {
+      icon: 'bx-burger-alt',
+      markerColor: 'blue',
+      shape: 'circle',
+      prefix: 'bx,'
+    },
     Location: [ -25.2882174, -57.6438703 ], 
     Link: "https://www.facebook.com/reel/648045833679050"
   },
   "Moon Burger": {
+    marker: {
+      icon: 'bx-burger-alt',
+      markerColor: 'blue',
+      shape: 'circle',
+      prefix: 'bx,'
+    },
     Location: [-25.2838625,-57.6354968],
     Link: "https://www.instagram.com/moon.burguer"
   },
   "Smashers Hamburgersr - Sajonia": {
+    marker: {
+      icon: 'bx-burger-alt',
+      markerColor: 'blue',
+      shape: 'circle',
+      prefix: 'bx,'
+    },
     Location: [-25.288688,-57.652563],
     Link: "https://www.pedidosya.com.py/restaurantes/asuncion/smashers-hamburgers--sajonia-ab0604b2-5fe8-45d0-9c53-78d06543be3d-menu"
   },
   "La Esquina Burger": {
+    marker: {
+      icon: 'bx-burger-alt',
+      markerColor: 'blue',
+      shape: 'circle',
+      prefix: 'bx,'
+    },
     Location: [-25.283062,-57.634438],
   },
   "Restaurante El Bodegon": {
+    marker: {
+      icon: 'bx-burger-alt',
+      markerColor: 'blue',
+      shape: 'circle',
+      prefix: 'bx,'
+    },
     Location: [25.282312,-57.634062],
   },
   "Lomiteria Julio Cesar": {
+    marker: {
+      icon: 'bx-burger-alt',
+      markerColor: 'blue',
+      shape: 'circle',
+      prefix: 'bx,'
+    },
     Location: [-25.288812,-57.643438],
   }
 } 
