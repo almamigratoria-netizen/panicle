@@ -3,8 +3,9 @@
 //
 // Contains the scripts that make it go.
 //
-// ROADMAP:  Have this import modules like "config.js" and
-//          "map.js", maybe make the whole thing an iffy
+// ROADMAP:  Smaller code files.  Modules, or at least IEFE's to make it
+//           easier to avoid namespace pollution.  It's lazy, but it's
+//           effective.
 
 // import * as L from './libs/leaflet/dist/leaflet-src.esm.js';
 // See if we can make leaflet-sidebar-v2 module happy.
@@ -12,9 +13,9 @@
 // Even even better, make the navbar a leaflet control.
 
 
-// This works, but we might want to tweak it a bit.
-// import config from "./config.js";
-// console.log("back from config.js: ", config);
+// Get and parse the config file
+import config from "./config.js";
+// Add click handlers to items on the navbar
 import navbar from "./navbar.js";
 
 // As written, this function throws error.  We might want to catch
@@ -53,122 +54,44 @@ async function Ajax(method, url, options={}) {
             j = j5;
         } catch (error) {
             console.error("Error parsing ", url);
-            console.error(error);
+            console.error(error.error);
             throw error;
         }
     }
     return j;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Load_Config_JSON() ==> (nothing)
-//
-//      Loads the file panicle.json5 (found in this directory)
-//      Creates and populates the 'config' object which holds the
-//      global config values.
-//
-function Load_Config() {
-    function addLinks(links) {
-        for (var key in links) {
-            let link = links[key];
-            let aLli = document.createElement('li');
-            let aLa = document.createElement('a');
-            aLa.className = 'dropdown-item';
-            aLa.setAttribute('href', link.url);
-            aLa.setAttribute('target', '_new');
-            aLa.textContent = link.name || key;
-            if (link.tooltip) {
-                aLa.setAttribute('data-bs-toggle', 'tooltip');
-                aLa.setAttribute('data-bs-placement', 'top');
-                aLa.setAttribute('title', link.tooltip);
-            }
-            aLli.appendChild(aLa);
-            try {
-                let el = document.getElementById('links_dropdown');
-                // ROADMAP:  Explicitly create the 'links_dropdown'
-                //           element if it down not already exist.
-                el.appendChild(aLli);
-            } catch (error) {
-                console.error("Error in addLinks: ", error);
-            }
-        }
-    }
-
-    // Have to load the config synchronous, not async
-    // otherwise our config values will not exists by 
-    // the time the other script files need them.
-    //
-    // FIXME:  To avoid the depecation notice, refactor this
-    //     (async function() {
-    //         // Asynchronous operations here
-    //         await somePromise();
-    //        console.log("Anonymous async function executed.");
-    //     })();
-    let r = new XMLHttpRequest();
-    let url = "./panicle.json5";
-    r.open('GET', url, false);
-    r.send(null);
-    if (r.status == 200) {
-        window.config = {}; // explicitly create global object
-        try {
-            config = JSON5.parse(r.responseText);
-            // Explicitly export global.  I know we frown on it.
-            window.config = config;
-            if (config.Links) {
-                for (var key in config.Links) {
-                    let link = config.Links[key];
-                    if (link.url) {
-                        let s = link.url;
-                        s = s.replace('${host}', document.location.host);
-                        config.Links[key].url = s;
-                    }
-                 }
-                 addLinks(config.Links);
-            }
-        } catch (e) {
-            console.error("Error parsing ", url, ": ", e)
-        }
-    } else {
-        console.error("Unable to load config file");
-    }
-    if (config.Logo) {
-        let el = document.getElementById('navbar_logo');
-        if (el) {
-            el.innerHTML = config.Logo;
-        }
-    }
-    if (config.Title) {
-        document.title = config.Title;
-    }
-}
-
-// Load data from JSON5 files specified in the "Data" section of the
-// config file.  Loads async, creates the searchable list, creates the 
-// layergroup, and creates the (Photo)Markers.
-// FIXME:  Failure to load one data file shouldn't stop the app.
-//         Should keep going with the other files.
-//         Something seems wrong with our try/catch.
+// Load data from JSON5 files specified in the config file
+// FIXME:  Use a few more try/catches so failure of one file
+//         won't stop the rest from loading.
 async function Load_Data(key, s) {
-    // console.log("key = ", key, "Stuff =", s);
-    // console.log("map = ", map);
     try {
         let o = await Ajax('GET', s);
         let A = [];
-        for (var key in o) {
-            // if (!verify_key(key)) {break;}
-            let d = o[key];
-            let custom_icon = new L.Icon.Default();
-            // handle the "marker" option
-            if (d.marker) {
-                custom_icon = L.ExtraMarkers.icon(d.marker);
-            }
 
+        // Need a "defaultMarker" option so we only need to merge
+        // Will this work?
+        const defaultMarker = o.defaultMarker || {};
+
+        for (var key in o) {
+            // This isn't a marker, so move on
+            if (key == "defaultMarker") { continue; };
+
+            let d = o[key];
+
+            // the "marker" option
+            let custom_icon = new L.Icon.Default();
+            if (d.marker) {
+                const m = {...defaultMarker, ...d.marker};
+                // custom_icon = L.ExtraMarkers.icon(d.marker);
+                custom_icon = L.ExtraMarkers.icon(m);
+            }
             let m = L.marker(d.Location, {icon: custom_icon});
-            // handle the "url" option
+
+            // the "url" option
             let text = key;
             if (d.Link) {
-                text = "<a href=" + d.Link + ">"
+                text = "<a target=\"_new\" href=" + d.Link + ">"
                 text = text + key + "</a>"
             }
             m.bindPopup(text);
@@ -188,9 +111,8 @@ async function Load_geoJSON(key, conf) {
     try {
         let o = await Ajax('GET', conf.file);
         const g_style = conf.style || {};
+        // what happens if the geoJSON is invalid?
         const m = L.geoJSON(o, g_style);
-        // we actually want to add this to the layer control, but...
-        // m.addTo(map);
         let text = key;
         if (conf.Link) {
             text = "<a href=" + conf.Link + ">"
@@ -199,16 +121,11 @@ async function Load_geoJSON(key, conf) {
         m.bindPopup(text);
         return m;
     } catch(e) {
-        throw(e);
+        console.error(e);
     }
 }
 
 async function Load_Map() {
-    // FIXME:
-    // Problem with container height.  Should be (viewscreen - navbar)
-    // and it appears to be (viewscreen).
-    // This may be a problem with how I've got my HTML.
-    // Set some map options (FIXME: allow tweaks in the config)
     let map = L.map('map');
 
     // By default we center the map in Asuncion, Paraguay.  But that
@@ -232,16 +149,11 @@ async function Load_Map() {
     // the name of the layer and the layer itself
     let lgo = {};    // layer group object
     if (config.Data) {
-        // Load the data and add it to the layer control
-        // Dump it in tht list so we can sort/search
-        //
         for (var key in config.Data) {
             // Create layer group for each data file
             let lg = await Load_Data(key, config.Data[key]);
             lgo[key] = lg;
         }
-        // const layerControl = L.control.layers(null, lgo, opts);
-        // layerControl.addTo(map);
     }
     if (config.GeoJSON) {
         for (var key in config.GeoJSON) {
@@ -265,7 +177,7 @@ async function Load_Map() {
 
 // We're at the top level of a module.  Maybe we should
 // 'await Load_Config' or something and eliminate the syncronous XMLHttp.
-Load_Config();
+// Load_Config();
 let map = await Load_Map();
 
 // Actually not where hostel patagonia is located.  Just here
@@ -282,18 +194,3 @@ var testicon = L.ExtraMarkers.icon({
 var marker = L.marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
 marker.addTo(map);
 
-// Also check out this one:  Has some advantages over BootLeaf
-// https://8to5developer.github.io/leaflet-custom-searchbox/
-
-// Also if we create controls, think about this:
-// Eliminates the need for a separate CSS file, but still makes
-// it easy to edit the CSS.  A performance hit, but we
-// can do it async.
-//    const styleElement = document.createElement('style');
-//    styleElement.innerHTML = `
-//        .my-dynamic-class {
-//            color: red;
-//            font-size: 18px;
-//        }
-//    `;
-//    document.head.appendChild(styleElement);

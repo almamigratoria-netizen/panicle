@@ -17,9 +17,8 @@
 //
 //
 let config = {};
-export default config;
 const config_file = "panicle.json5";
-let r = {};
+let r;
 try {
     r = await fetch(config_file);
 } catch (e) {
@@ -32,19 +31,58 @@ if (!r.ok) {
     throw new Error(m);
 }
 let j = await r.text();
-let headers = {};
-for (var pair of r.headers.entries()) {
-    headers[pair[0]] = pair[1];
-}
-// If we received JSON, parse it.
 try {
     config = JSON5.parse(j);
 } catch (e) {
     if (e instanceof SyntaxError) {
-        console.error("Config file parsing error:", e.message);
+        console.error("Config file parsing error:", e.error);
     } else {
         console.error("Unexpected config error:", e);
     }
     throw e;
 } 
-console.log(config);
+
+function addLinks(links) {
+    // FIXME:  if empty object or undefined, hide "Links"
+    for (var key in links) {
+        let link = links[key];
+        let aLli = document.createElement('li');
+        let aLa = document.createElement('a');
+        aLa.className = 'dropdown-item';
+        aLa.setAttribute('href', link.url);
+        aLa.setAttribute('target', '_new');
+        aLa.textContent = link.name || key;
+        if (link.tooltip) {
+            aLa.setAttribute('data-bs-toggle', 'tooltip');
+            aLa.setAttribute('data-bs-placement', 'top');
+            aLa.setAttribute('title', link.tooltip);
+        }
+        aLli.appendChild(aLa);
+        try {
+            let el = document.getElementById('links_dropdown');
+            // ROADMAP:  Explicitly create the 'links_dropdown'
+            //           element if it down not already exist.
+            el.appendChild(aLli);
+        } catch (error) {
+            console.error("Error in addLinks: ", error);
+        }
+    }
+}
+
+// Add links if they exist.  If they don't exist, we should hide "Links"
+addLinks(config.links);
+
+// Do the logo
+if (config.Logo) {
+    let el = document.getElementById('navbar_logo');
+    if (el) {
+        el.innerHTML = config.Logo;
+    }
+}
+
+// Do the <title>
+if (config.Title) {
+    document.title = config.Title;
+}
+// console.log("Inside config: ", config);
+export default config;
