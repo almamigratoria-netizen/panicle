@@ -70,7 +70,7 @@ function addLinks(links) {
 }
 
 // Add links if they exist.  If they don't exist, we should hide "Links"
-addLinks(config.links);
+addLinks(config.Links);
 
 // Do the logo
 if (config.Logo) {

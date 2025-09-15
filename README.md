@@ -18,8 +18,20 @@ a set of JSON files to load.  Each file becomes a map layer and gets added to
 the layer control.  See the example data files and the 
 [README](./data/README.md) in the `data` directory.
 
+## Some assembly required
+As of September 2025, this is still a work in progress.  It's useful enough
+to post for others, but I'm using github as my RCS.  There's more features
+planned (like implementing the search functionality).
+A lot of the bones are done.  Flesh still needs some work.
 
+There's a dropdown on the navbar that by deafult says things like `Action` and
+`Something else here`.  That, obviously, needs to get tweaked by hand 
+by whomver is deploying one of thses.  Also the file `navbar.js` is pretty
+much just a hollow framework, mostly demonstrating a fairly easy-to-understand
+way to handle the clicks.  Anything the deployer wants to implement, well, 
+that's up to them.
+
+
+### Footnote
 - When I was almost done with this project, I found a newer project that calls itself BootLeaf, also updated (somewheat) and with tons of ArcGIS features tossed in.  If that interests you, you can find it at [bootleaf.xyz](https://bootleaf.xyz).
-## License
-
-Panicle is free software, and may be redistributed under the [MIT license](LICENSE).
+## LicenPanicle is free software, and may be redistributed under the [MIT license](LICENSE).
