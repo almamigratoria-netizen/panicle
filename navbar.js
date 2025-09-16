@@ -16,7 +16,7 @@ const navbar = (function() {
         try {
           document.getElementById("item1").addEventListener("click", item1);
           document.getElementById("item2").addEventListener("click", item2);
-          document.getElementById("item3").addEventListener("click", item3);
+          // notice that we're not attaching a click to item3.
           let el = document.getElementById("searchbutton");
           if (el) { el.addEventListener("click", searchbutton); }
           document.getElementById("about").addEventListener("click", about);
@@ -53,11 +53,6 @@ const navbar = (function() {
         console.log(e.target.textContent.trim(), " clicked")
     };
 
-    const item3 = function(e) {
-        if (!e.target) {return;}
-        console.log(e.target.textContent.trim(), " clicked")
-    };
-
     const about = function(e) {
         if (!e.target) {return;}
         console.log(e.target.textContent.trim(), " clicked")
@@ -75,22 +70,50 @@ const navbar = (function() {
     return { // (probably useless) list of the "I got clicked" functions.    
         item1: item1,
         item2: item2,
-        item3: item3,
         searchbutton: searchbutton,
         about: about,
     };
 })();
 
-// You'll have to get your own openexchagerates app_id if you want to
-// use this, but here's the basic idea:
+// Menu items don't have to trigger any actions, sometimes
+// they're useful just to display information
 const exchange_rate = (async function() {
-    // get el for item3
-    // ajax 
-    // https://openexchangerates.org/api/latest.json?app_id={app_id}
-    // Fiddle with some math if you want to convert, like, Euro to NZD
-    // Replace the text for "Some other action"
+    // This replaces the text contents of "item3" with
+    // some exchange rate information.
+    const el = document.getElementById('item3');
+    if (!el) {
+        console.log("Cant find element for \"item3\"");
+        return;
+    }
+
+    const url = "https://www.floatrates.com/daily/usd.json";
+    let j;
+    try {
+        const r = await fetch(url);
+        if (!r.ok) {
+            console.log(r);
+            return;
+        }
+        j = JSON5.parse(await r.text());
+    } catch(e) { console.error(e) };
+    const ars = j.ars.rate;
+    const pyg = j.pyg.rate;
+    const ex_strings = [
+        "1000 ARS = " + Math.round(pyg/ars * 1000) + " PYG",
+        "1 USD = " + Math.round(pyg) + " PYG",
+    ];
+
+    // When called, toggles exchange rate from ARS->PYG to USD->PYG
+    let update_state = 0;
+    function update() {
+        el.textContent = ex_strings[update_state];
+        update_state = (update_state + 1) % 2; // simple toggle
+    }
+    update();  // Set initial text
+    const intervalID = window.setInterval(update, 2000);
 })();
-// https://openexchangerates.org/api/latest.json?app_id=0fc7174b77a345f68bcbeae2448f57bb
+
+
 // Not really sure why we want and/or need a reference to this, but I always
 // like to have one just in case.
 export default navbar;

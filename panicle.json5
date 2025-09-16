@@ -68,6 +68,14 @@
 	},
 	file: "./data/bus_routes/Bus-15-3.json",
       },
+      "Bus 11 (Aregua)":  {
+        //style: {
+        //  color: "#660066",
+        //  weight: 5,
+        //  opacity: 0.7,
+	//},
+	file: "./data/bus_routes/Bus-11.json",
+      },
     },
     // These become the items on the dropdown titled "Links" on the navbar
     // ROADMAP:  If you don't have any links, links doesn't show on navbar
