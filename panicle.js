@@ -175,22 +175,15 @@ async function Load_Map() {
 }
 
 
-// We're at the top level of a module.  Maybe we should
-// 'await Load_Config' or something and eliminate the syncronous XMLHttp.
-// Load_Config();
 let map = await Load_Map();
 
-// Actually not where hostel patagonia is located.  Just here
-// for illustration purposes, and also so we can play with
-// alternative markers (awesome-markers, extramarkers, etc);
-var center = map.getCenter();
 // For this to work, need to import font-awesome 4 or 5 CSS
-var testicon = L.ExtraMarkers.icon({
+const testicon = L.ExtraMarkers.icon({
     icon: 'bx-bed-alt',
     markerColor: 'blue',
     shape: 'square',
     prefix: 'bx,'
 });
-var marker = L.marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
+let marker = L.marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
 marker.addTo(map);
 

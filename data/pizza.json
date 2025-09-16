@@ -2,83 +2,49 @@
 // Options are covered in the file "README.md" in this directory
 
 {
+    defaultMarker: {
+        icon: 'bx-pizza-alt',
+        markerColor: 'red',
+        shape: 'penta',
+        prefix: 'bx,'
+    },
     Zampano: {
-        marker: {
-            icon: 'bx-pizza-alt',
-            markerColor: 'red',
-            shape: 'square',
-            prefix: 'bx,'
-        },
+        marker: {},
         Location: [-25.286187,-57.632438],
         Link: "https://www.instagram.com/zampanopizzeria"
     },
     "Pizzaria Don Mario": {
-        marker: {
-            icon: 'bx-pizza-alt',
-            markerColor: 'yellow',
-            shape: 'square',
-            prefix: 'bx,'
-        },
+        marker: {},
         Location: [-25.290438,-57.634812],
 	Link: "https://www.google.com/maps/place/Pizza+Don+Mario/@-25.2904604,-57.6373535,17z/data=!3m1!4b1!4m6!3m5!1s0x945da7d68b293b59:0x6bcc89595efb37bb!8m2!3d-25.2904604!4d-57.6347786!16s%2Fg%2F11gxpzw1hs?entry=ttu&g_ep=EgoyMDI1MDkwNy4wIKXMDSoASAFQAw%3D%3D"
     },
     "Pasta & pizza Pomodoro": {
-        marker: {
-            icon: 'bx-pizza-alt',
-            markerColor: 'red',
-            shape: 'circle',
-            prefix: 'bx,'
-        },
+        marker: {},
 	Location: [-25.2836692,-57.636221],
 	Link: "https://www.instagram.com/pastapizzapomodoro/"
     },
     "Sammy's Pizza": {
-        marker: {
-            icon: 'bx-pizza-alt',
-            markerColor: 'red',
-            shape: 'penta',
-            prefix: 'bx,'
-        },
+        marker: {},
 	Location: [-25.281813,-57.636938],
 	Link: "https://www.pedidosya.com.py/restaurantes/asuncion/sammys-express-pizza-estrella-menu"
     },
     "Javorai": {
-        marker: {
-            icon: 'bx-pizza-alt',
-            markerColor: 'red',
-            shape: 'penta',
-            prefix: 'bx,'
-        },
+        marker: {},
 	Location: [-25.282063,-57.637453],
 	Link: "https://www.facebook.com/javoraipy/"
     },
     "Pizza Hut": {
-        marker: {
-            icon: 'bx-pizza-alt',
-            markerColor: 'red',
-            shape: 'penta',
-            prefix: 'bx,'
-        },
+        marker: {},
 	Location: [ -25.288113,-57.638453 ],
 	Link: "http://www.pizzahut.com.py/"
     },
     "Saturno Pizzas": {
-        marker: {
-            icon: 'bx-pizza-alt',
-            markerColor: 'green',
-            shape: 'penta',
-            prefix: 'bx,'
-        },
+        marker: {},
 	Location: [ -25.288113,-57.638453 ],
 	Link: "https://drive.google.com/drive/folders/1ZRkGWmMxsIJeRk2juw1qgI-zh6pbF6Pthttp://www.pizzahut.com.py/"
     },
     "Pizzotón Centro": {
-        marker: {
-            icon: 'bx-pizza-alt',
-            markerColor: 'red',
-            shape: 'penta',
-            prefix: 'bx,'
-        },
+        marker: {},
 	Location: [ -25.286062,-57.644688 ],
 	Link: "https://pizzoton-pizzas-centro.ola.click/?utm_source=google_feed&utm_campaign=order_now&rwg_token=ACgRB3fkOGidhWfOVAosP2ucf6n8k6kRv6OsORM3ZrqoBZneB-BEtaXnc-0y7BYLVkZBBuSYuNDM4GGMS5hMHzgIZjVxcRR_JIScvct0b3VKLTgjH_xvFA4%3D"
     },
