@@ -22,17 +22,17 @@
     "Biggie Express Francia": {
         marker: {},
         Location: [ -25.292938,-57.635438 ],
-	// url: none
+	// Link: none
     },
     "Supermercado Stock Obrero": {
         marker: {},
         Location: [ -25.293312,-57.638813 ],
-	url: "https://www.stock.com.py/default.aspx",
+	Link: "https://www.stock.com.py/default.aspx",
     },	
     "Supermercado Stock Excelsior": {
         marker: {},
         Location: [ -25.287562,-57.638688 ],
-	url: "https://www.stock.com.py/default.aspx",
+	Link: "https://www.stock.com.py/default.aspx",
     },
     "Supermercado El Pais": {
         marker: {},
@@ -45,10 +45,12 @@
     "Casa Rica": {
         marker: {},
         Location: [ -25.285562,-57.586188 ],
+        Link: "https://www.casarica.com.py/",
     },
     "DeliMarket": {
         marker: {},
         Location: [ -25.282063,-57.567563 ],
+        Link: "https://delimarket.com.py/",
     },
 }
 
