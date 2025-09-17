@@ -12,7 +12,6 @@
 // Even better, make the sidebar a leaflet control
 // Even even better, make the navbar a leaflet control.
 
-
 // Get and parse the config file
 import config from "./config.js";
 // Add click handlers to items on the navbar

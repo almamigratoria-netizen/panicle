@@ -23,9 +23,6 @@
     Link: "https://www.facebook.com/reel/648045833679050"
   },
   "Moon Burger": {
-    marker: {
-      markerColor: "#000077",
-    },
     Location: [-25.2838625,-57.6354968],
     Link: "https://www.instagram.com/moon.burguer"
   },
@@ -42,12 +39,7 @@
     Link: "https://www.facebook.com/laesquinapy/"
   },
   "Lomiteria Julio Cesar": {
-    marker: {
-      icon: 'bx-burger-alt',
-      markerColor: 'blue',
-      shape: 'circle',
-      prefix: 'bx,'
-    },
+    marker: {},
     Location: [-25.288812,-57.643438],
   }
 } 

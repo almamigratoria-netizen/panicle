@@ -1,75 +1,55 @@
 //
-// 
-// An example entry.  This file is JSON5 
-// Key: {
-//    Type: {type of icon},
-//        We can use Photo markers, Icon markers (figure out which),
-//        standard markers, etc.  
-//    Icon: icon name if using iconmarkers.
-//    Location: [ lat, lon ],
-//    url: link,
-//    image: url of image
-//    thumb: url of thumbnail image
-//    text: additional text (for some types of icons)
-//}
-// ROADMAP:
-//{
-//    Defaults: {
-//        Marker: {},
-//        Name: "",
-//        Link: ""
-//    }
-//    Items: {
-//        Item1: {},
-//        Item2: {},
-//    }
-// The parser would load "defaults" and use an object merge on the
-// individual items, item options over-ride defaults.
+// supers.json
+//
+// Supermarkets close to Patagonia Hostel in Asuncion Paraguay
+//
 
-
-// bx-cart is a pretty decent icon for a shopping cart
-// Do what the cool kids are doing and use SVG's, not
-// webicons.
 {
+    defaultMarker: {
+        prefix: "bx",
+        icon: "bx-cart",
+	markerColor: "yellow",
+	shape: 'penta',
+    },
     "Parana Home": {
+        marker: {},
         Location: [ -25.287687,-57.630562 ],
-        // url: none
     }, 
-    //Almacen a la vuelta
-    //Otra Almacen a la vuelta
     "Biggie Express Excelsior": {
+        marker: {},
         Location: [ -25.286687,-57.638438 ],
-        // url: none
     }, 
     "Biggie Express Francia": {
+        marker: {},
         Location: [ -25.292938,-57.635438 ],
 	// url: none
     },
     "Supermercado Stock Obrero": {
+        marker: {},
         Location: [ -25.293312,-57.638813 ],
+	url: "https://www.stock.com.py/default.aspx",
     },	
     "Supermercado Stock Excelsior": {
+        marker: {},
         Location: [ -25.287562,-57.638688 ],
+	url: "https://www.stock.com.py/default.aspx",
     },
     "Supermercado El Pais": {
+        marker: {},
         Location: [ -25.285688, -57.629313 ],
     },
     "Mercado 4": {
+        marker: {},
         Location: [ -25.297688,-57.624813 ],
     },
     "Casa Rica": {
+        marker: {},
         Location: [ -25.285562,-57.586188 ],
     },
     "DeliMarket": {
+        marker: {},
         Location: [ -25.282063,-57.567563 ],
     },
-    "Punto Farma": { 
-        Location: [ -25.286313, -57.631937 ],
-        url: "https://www.puntofarma.com.py"
-    },
-    "Aida Tower": {
-        Location: [ -25.285938,-57.632438 ],
-    }	
 }
 
 // vim: syntax=json5
