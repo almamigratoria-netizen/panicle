@@ -18,6 +18,12 @@ a set of JSON files to load.  Each file becomes a map layer and gets added to
 the layer control.  See the example data files and the 
 [README](./data/README.md) in the `data` directory.
 
+You can also add geoJSON using the `GeoJSON` tag.  I figured this would be
+for bus routes, but use your imagination.  I'm working on another project
+based on this code that clusters markers in neighborhoods, and those 
+neighborhood boundaries are geoJSON.  I grabbed the neighborhood boundaries 
+from OpenStreetMap and converted them with (BusRoutes)[https://github.com/almamigratoria-netizen/BusRoutes].
+
 ## Some assembly required
 As of September 2025, this is still a work in progress.  It's useful enough
 to post for others, but I'm using github as my RCS.  There's more features
