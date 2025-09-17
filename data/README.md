@@ -36,7 +36,7 @@ we use the .json extension.
 # geoJSON
 geoJSON can also be loaded.  I envisioned this as being useful for bus
 routes, but use your imagination.  If you don't have geoJSON of bus routes,
-you can try [BusRoutes](BusRoutes).
+you can try [BusRoutes](https://github.com/almamigratoria-netizen/BusRoutes).
 ## Options
 
 ## Marker Options
