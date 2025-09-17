@@ -1,6 +1,15 @@
-Places to buy bus card
-Places to get a prepaid SIM
-Empanadas?
-Touristy things.
+//
+// otro.json
+//
+// Places to buy bus card
+// farmacy\
+// Places to get a prepaid SIM
+// Touristy things.
+// Hmmm... categories.  Do we want a tree view and categories?
+// Would be nice to have, but a non-jqery plugin that does both doesn't exist.
+// Yet.
+{
 
+}
 
+// vim: syntax=json5
