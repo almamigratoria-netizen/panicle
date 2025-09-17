@@ -56,8 +56,6 @@ const search = (event, objectData = [], setReturnedData, combinations = []) => {
 export default search;
 =========================================
 
-Show these on the map?  Can we put a dropdown in the layer selector?
-Or collapse groups?
 ================================================
 https://github.com/oskosk/Leaflet.Weather\
 ===================================================
