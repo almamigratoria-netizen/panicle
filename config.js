@@ -22,13 +22,14 @@ let r;
 try {
     r = await fetch(config_file);
 } catch (e) {
-    throw (e);
+    console.error(`fetch ${config_file} failed hard: `, e);
+    console.error(e);
+    throw(e);
 }
 if (!r.ok) {
-    console.error(e);
-    const m = `Unable to load config: ${r.message}`;
-    alert(m);
-    throw new Error(m);
+    const m = `${config_file}: (${r.status})${r.statusText}`;
+    console.error(m);
+    throw(m);
 }
 let j = await r.text();
 try {
@@ -79,7 +80,7 @@ if (config.Links) {
 
 // Do the logo
 if (config.Logo) {
-    let el = document.getElementById('navbar_logo');
+    const el = document.getElementById('navbar_logo');
     if (el) {
         el.innerHTML = config.Logo;
     }

@@ -68,8 +68,6 @@ async function Load_Data(key, s) {
         let o = await Ajax('GET', s);
         let A = [];
 
-        // Need a "defaultMarker" option so we only need to merge
-        // Will this work?
         const defaultMarker = o.defaultMarker || {};
 
         for (var key in o) {
@@ -82,7 +80,8 @@ async function Load_Data(key, s) {
             let custom_icon = new L.Icon.Default();
             if (d.marker) {
                 const m = {...defaultMarker, ...d.marker};
-                // custom_icon = L.ExtraMarkers.icon(d.marker);
+                // FIXME: Turns out I don't like ExtraMarkers much.
+                // Find a better library
                 custom_icon = L.ExtraMarkers.icon(m);
             }
             let m = L.marker(d.Location, {icon: custom_icon});
@@ -150,15 +149,12 @@ async function Load_Map() {
     if (config.Data) {
         for (var key in config.Data) {
             // Create layer group for each data file
-            let lg = await Load_Data(key, config.Data[key]);
-            lgo[key] = lg;
+            lgo[key] = await Load_Data(key, config.Data[key]);
         }
     }
     if (config.GeoJSON) {
         for (var key in config.GeoJSON) {
-            console.log("Need to load GeoJSON: ", key); 
-            let lg = await Load_geoJSON(key, config.GeoJSON[key]);
-            lgo[key] = lg;
+            lgo[key] = await Load_geoJSON(key, config.GeoJSON[key]);
         }
     }
     // There should be a better way to check if an object is empty...
@@ -176,7 +172,8 @@ async function Load_Map() {
 
 let map = await Load_Map();
 
-// For this to work, need to import font-awesome 4 or 5 CSS
+// For this to work, need to import at least one glyphicon css file
+// FIXME:  We should be riding the wave and use SVG's instead.
 const testicon = L.ExtraMarkers.icon({
     icon: 'bx-bed-alt',
     markerColor: 'blue',
