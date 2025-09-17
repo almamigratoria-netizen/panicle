@@ -70,7 +70,12 @@ function addLinks(links) {
 }
 
 // Add links if they exist.  If they don't exist, we should hide "Links"
-addLinks(config.Links);
+if (config.Links) {
+    addLinks(config.Links);
+} else {
+    const el = document.getElemeentById('links_dropdown');
+    if (el) { el.classList.add("d-none"); }
+}
 
 // Do the logo
 if (config.Logo) {
@@ -84,5 +89,4 @@ if (config.Logo) {
 if (config.Title) {
     document.title = config.Title;
 }
-// console.log("Inside config: ", config);
 export default config;
