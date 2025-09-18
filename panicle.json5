@@ -33,52 +33,51 @@
           color: "#ff7800",
           weight: 4,
           opacity: 0.8,
-	},
-	file: "./data/bus_routes/Bus-38.json",
+        },
+        file: "./data/bus_routes/Bus-38.json",
       },
       "Bus 2y7 (Botanico)":  {
         style: {
           color: "#000077",
           weight: 5,
           opacity: 0.7,
-	},
-	file: "./data/bus_routes/Bus-2y7.json",
+        },
+        file: "./data/bus_routes/Bus-2y7.json",
       },
       "Bus 30 (delSol)":  {
         style: {
           color: "#0000ff",
           weight: 5,
           opacity: 0.7,
-	},
-	file: "./data/bus_routes/Bus-30.json",
+        },
+        file: "./data/bus_routes/Bus-30.json",
       },
-      "Bus 5":  {
-        style: {
-          color: "#077000",
-          weight: 5,
-          opacity: 0.7,
-	},
-	file: "./data/bus_routes/Bus-5.json",
-      },
+      //"Bus 5":  {
+      //  style: {
+      //    color: "#077000",
+      //    weight: 5,
+      //    opacity: 0.7,
+      //  },
+      //    file: "./data/bus_routes/Bus-5.json",
+      //},
       "Bus 15 (Shopping Mariscal)":  {
         style: {
           color: "yellow",
           weight: 5,
           opacity: 0.7,
-	},
-	file: "./data/bus_routes/Bus-15-3.json",
+        },
+        file: "./data/bus_routes/Bus-15-3.json",
       },
       "Bus 11 (Aregua)":  {
-        //style: {
-        //  color: "#660066",
-        //  weight: 5,
-        //  opacity: 0.7,
-	//},
-	file: "./data/bus_routes/Bus-11.json",
+        style: {
+          color: "#660066",
+          weight: 5,
+          opacity: 0.7,
+        },
+        file: "./data/bus_routes/Bus-11.json",
       },
     },
     // These become the items on the dropdown titled "Links" on the navbar
-    // ROADMAP:  If you don't have any links, links doesn't show on navbar
     Links: {
       // "What we display on the menu": {
       //     url: {url of the link},
@@ -86,11 +85,11 @@
       //}
       "Panicle on Github": {
         url: "https://github.com/almamigratoria-netizen/panicle",
-	tooltip: "I'm a hoopy frood",
+        tooltip: "I'm a hoopy frood",
       },
       "Example.com": {
         url: "https://www.example.com",
-	tooltip: "I really know where my towel is",
+        tooltip: "I really know where my towel is",
       },
     }
 }
