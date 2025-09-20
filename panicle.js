@@ -106,8 +106,9 @@ async function Load_Data(key, s) {
 // I envision this as being for bus routes, but use your
 // imagination, I guess.
 async function Load_geoJSON(key, conf) {
+    let o;
     try {
-        let o = await Ajax('GET', conf.file);
+        o = await Ajax('GET', conf.file);
         const g_style = conf.style || {};
         // what happens if the geoJSON is invalid?
         const m = L.geoJSON(o, g_style);
@@ -120,7 +121,8 @@ async function Load_geoJSON(key, conf) {
         return m;
     } catch(e) {
         console.error("Error while trying to load geoJSON file ", conf.file);
-        console.error(e);
+        JSON5.parse(o);
+        //console.error(e);
         return {};
     }
 }
@@ -153,7 +155,7 @@ async function Load_Map() {
             // Create layer group for each data file
             let layer = await Load_Data(key, config.Data[key]);
             if (Object.keys(layer).length) {
-                lgo[key] = key;
+                lgo[key] = layer;
             }
         }
     }
