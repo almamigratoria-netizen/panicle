@@ -2,6 +2,10 @@
 Hmmm... maybe add a voice interface.
 Press it for mike live?
 
+Add a CSP.  Because this is as much about learning new things as
+about building the project.
+
+By default collapse layer control on mobile devices
 ============================================
 
 // A fairly generalized search algorith for data arrays

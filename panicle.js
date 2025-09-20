@@ -168,8 +168,10 @@ async function Load_Map() {
     }
     // There should be a better way to check if an object is empty...
     if (Object.keys(lgo).length) {
+
         const opts = {
-            collapsed: false,
+            // Should evalute as true on a mobile device
+            collapsed: !!(navigator.maxTouchPoints > 0),
             hideSingleBase: true,
         };
         const layerControl = L.control.layers(null, lgo, opts);
