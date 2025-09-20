@@ -119,7 +119,9 @@ async function Load_geoJSON(key, conf) {
         m.bindPopup(text);
         return m;
     } catch(e) {
+        console.error("Error while trying to load geoJSON file ", conf.file);
         console.error(e);
+        return {};
     }
 }
 
@@ -149,12 +151,18 @@ async function Load_Map() {
     if (config.Data) {
         for (var key in config.Data) {
             // Create layer group for each data file
-            lgo[key] = await Load_Data(key, config.Data[key]);
+            let leyer = await Load_Data(key, config.Data[key]);
+            if (Object.keys(layer).length) {
+                lgo[key] = key;
+            }
         }
     }
     if (config.GeoJSON) {
         for (var key in config.GeoJSON) {
-            lgo[key] = await Load_geoJSON(key, config.GeoJSON[key]);
+            let layer = await Load_geoJSON(key, config.GeoJSON[key]);
+            if (Object.keys(layer).length) {
+                lgo[key] = layer;
+            }
         }
     }
     // There should be a better way to check if an object is empty...
