@@ -22,7 +22,7 @@ You can also add geoJSON using the `GeoJSON` tag.  I figured this would be
 for bus routes, but use your imagination.  I'm working on another project
 based on this code that clusters markers in neighborhoods, and those 
 neighborhood boundaries are geoJSON.  I grabbed the neighborhood boundaries 
-from OpenStreetMap and converted them with (BusRoutes)[https://github.com/almamigratoria-netizen/BusRoutes].
+from OpenStreetMap and converted them with [BusRoutes](https://github.com/almamigratoria-netizen/BusRoutes).
 
 ## Some assembly required
 As of September 2025, this is still a work in progress.  It's useful enough
