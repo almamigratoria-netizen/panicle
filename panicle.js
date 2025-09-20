@@ -46,22 +46,19 @@ async function Ajax(method, url, options={}) {
         headers[pair[0]] = pair[1];
     }
     // If we received JSON, parse it.
-    if (headers['content-type'].includes('application/json')) {
+    if (headers['content-type'].startsWith('application/json')) {
         try {
             const j5 = JSON5.parse(j);
             j = j5;
         } catch (error) {
-            console.error("Error parsing ", url);
-            console.error(error.error);
-            throw error;
+            console.error("Error parsing json", url);
+            console.error(error.message);
         }
     }
     return j;
 }
 
-// Load data from JSON5 files specified in the config file
-// FIXME:  Use a few more try/catches so failure of one file
-//         won't stop the rest from loading.
+// Load data from JSON[5] files specified in the config file
 async function Load_Data(key, s) {
     try {
         let o = await Ajax('GET', s);
@@ -81,9 +78,9 @@ async function Load_Data(key, s) {
                 const m = {...defaultMarker, ...d.marker};
                 // FIXME: Turns out I don't like ExtraMarkers much.
                 // Find a better library
-                custom_icon = L.ExtraMarkers.icon(m);
+                custom_icon = new L.ExtraMarkers.icon(m);
             }
-            let m = L.marker(d.Location, {icon: custom_icon});
+            let m = new L.Marker(d.Location, {icon: custom_icon});
 
             // the "url" option
             let text = key;
@@ -96,7 +93,7 @@ async function Load_Data(key, s) {
             // Once we have the marker built, add it to our array
             A.push(m);
         }
-        return L.layerGroup(A);
+        return new L.LayerGroup(A);
     } catch(e) {
         console.error("Load_Data: error = ", e);
     }
@@ -109,8 +106,7 @@ async function Load_geoJSON(key, conf) {
     try {
         o = await Ajax('GET', conf.file);
         const g_style = conf.style || {};
-        // what happens if the geoJSON is invalid?
-        const m = L.geoJSON(o, g_style);
+        const m = new L.GeoJSON(o, g_style);
         let text = key;
         if (conf.Link) {
             text = "<a href=" + conf.Link + ">"
@@ -119,15 +115,14 @@ async function Load_geoJSON(key, conf) {
         m.bindPopup(text);
         return m;
     } catch(e) {
-        console.error("Error while trying to load geoJSON file ", conf.file);
-        JSON5.parse(o);
-        //console.error(e);
+        const m = `Error loading geoJSON file ${conf.file}: ${e.message}`;
+        console.error(m);
         return {};
     }
 }
 
 async function Load_Map() {
-    let map = L.map('map');
+    let map = new L.Map('map');
 
     // By default we center the map in Asuncion, Paraguay.  But that
     // can be tweaked using the config file.
@@ -141,9 +136,7 @@ async function Load_Map() {
 
     // Config might want a list of map layers
     const OSMUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-    const OSM = L.tileLayer(OSMUrl, {
-        attribution: 'Add Attribution',
-    });
+    const OSM = new L.TileLayer(OSMUrl);
     OSM.addTo(map);
 
     // Create a layerGroup object (lgo) that has key:value pairs contaiing
@@ -166,15 +159,13 @@ async function Load_Map() {
             }
         }
     }
-    // There should be a better way to check if an object is empty...
     if (Object.keys(lgo).length) {
-
         const opts = {
-            // Should evalute as true on a mobile device
+            // Should evaluate as true on a mobile device
             collapsed: !!(navigator.maxTouchPoints > 0),
             hideSingleBase: true,
         };
-        const layerControl = L.control.layers(null, lgo, opts);
+        const layerControl = new L.Control.Layers(null, lgo, opts);
         layerControl.addTo(map);
     }
     return map;
@@ -185,12 +176,12 @@ let map = await Load_Map();
 
 // For this to work, need to import at least one glyphicon css file
 // FIXME:  We should be riding the wave and use SVG's instead.
-const testicon = L.ExtraMarkers.icon({
+const testicon = new L.ExtraMarkers.icon({
     icon: 'bx-bed-alt',
     markerColor: 'blue',
     shape: 'square',
     prefix: 'bx,'
 });
-let marker = L.marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
+let marker = new L.Marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
 marker.addTo(map);
 
