@@ -151,7 +151,7 @@ async function Load_Map() {
     if (config.Data) {
         for (var key in config.Data) {
             // Create layer group for each data file
-            let leyer = await Load_Data(key, config.Data[key]);
+            let layer = await Load_Data(key, config.Data[key]);
             if (Object.keys(layer).length) {
                 lgo[key] = key;
             }
