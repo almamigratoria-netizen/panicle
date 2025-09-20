@@ -1,6 +1,6 @@
 
-Hmmm... maybe add a voice interface (show a microphone icon, press it and) say
-"tetonas" or "rubias", or "san lorenzo"
+Hmmm... maybe add a voice interface.
+Press it for mike live?
 
 ============================================
 
@@ -58,9 +58,10 @@ export default search;
 
 ================================================
 https://github.com/oskosk/Leaflet.Weather\
+Use as basis for JQuery-free free weather API widget
 ===================================================
-Add to nginx config
-Maybe also add json5 mime type, but maybe not.
+Add StrapDown to local nginx config. Don't have
+markdown add-on in my phone's browser.
 
         location ~ /.*\.md {
             root /opt/openrvdas;
