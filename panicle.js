@@ -45,9 +45,8 @@ async function Ajax(method, url, options={}) {
     for (var pair of response.headers.entries()) {
         headers[pair[0]] = pair[1];
     }
-    // console.debug("Ajax headers = ", headers);    
     // If we received JSON, parse it.
-    if (headers['content-type'] == 'application/json') {
+    if (headers['content-type'].includes('application/json')) {
         try {
             const j5 = JSON5.parse(j);
             j = j5;
