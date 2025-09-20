@@ -87,7 +87,7 @@ const exchange_rate = (async function() {
     }
 
     const url = "https://www.floatrates.com/daily/usd.json";
-    let j;
+    let j = {};
     try {
         const r = await fetch(url);
         if (!r.ok) {
@@ -95,13 +95,22 @@ const exchange_rate = (async function() {
             return;
         }
         j = JSON5.parse(await r.text());
-    } catch(e) { console.error(e) };
-    const ars = j.ars.rate;
-    const pyg = j.pyg.rate;
-    const ex_strings = [
-        "1000 ARS = " + Math.round(pyg/ars * 1000) + " PYG",
-        "1 USD = " + Math.round(pyg) + " PYG",
+    } catch(e) { 
+        console.error(e.message);
+        j = {};  // just in case JSON5 messed with it
+    };
+    let ex_strings = [
+        "...sorry...failed to load",
+        "exchange rates. :-("
     ];
+    if (Object.keys(j).length) {
+        const ars = j.ars.rate;
+        const pyg = j.pyg.rate;
+        ex_strings = [
+            "1000 ARS = " + Math.round(pyg/ars * 1000) + " PYG",
+            "1 USD = " + Math.round(pyg) + " PYG",
+        ];
+    };
 
     // When called, toggles exchange rate from ARS->PYG to USD->PYG
     let update_state = 0;
