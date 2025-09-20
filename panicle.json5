@@ -68,6 +68,14 @@
         },
         file: "./data/bus_routes/Bus-15-3.json",
       },
+      "Bus 23":  {
+        style: {
+          color: "#660066",
+          weight: 5,
+          opacity: 0.7,
+        },
+        file: "./data/bus_routes/Bus-23.json",
+      },
       "Bus 11 (Aregua)":  {
         style: {
           color: "#660066",
