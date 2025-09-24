@@ -12,9 +12,9 @@
     // of what's in the neighborhood.
     //
     // Set the page title (pretty meaningless, but a nice touch)
-    Title: "Panicle Demo Page",
+    Title: "Hostel Patagonia",
     // This is what shows on the page's navbar
-    Logo:  "Panicle",
+    Logo:  "Patagonia",
     // Center of the map.  Out default is Asuncion, Paraguay
     Center: [ -25.2878, -57.633],
     CenterMarker: {
@@ -29,59 +29,27 @@
     },
     GeoJSON: {
       "Bus #38":  {
-        style: {
-          color: "#ff7800",
-          weight: 4,
-          opacity: 0.8,
-        },
+        style: { color: "#ff7800", weight: 4, opacity: 0.8, },
         file: "./data/bus_routes/Bus-38.json",
       },
       "Bus 2y7 (Botanico)":  {
-        style: {
-          color: "#000077",
-          weight: 5,
-          opacity: 0.7,
-        },
+        style: { color: "#000077", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-2y7.json",
       },
       "Bus 30 (delSol)":  {
-        style: {
-          color: "#0000ff",
-          weight: 5,
-          opacity: 0.7,
-        },
+        style: { color: "#0000ff", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-30.json",
       },
-      //"Bus 5":  {
-      //  style: {
-      //    color: "#077000",
-      //    weight: 5,
-      //    opacity: 0.7,
-      //  },
-      //    file: "./data/bus_routes/Bus-5.json",
-      //},
       "Bus 15 (Shopping Mariscal)":  {
-        style: {
-          color: "yellow",
-          weight: 5,
-          opacity: 0.7,
-        },
+        style: { color: "yellow", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-15-3.json",
       },
       "Bus 23":  {
-        style: {
-          color: "#660066",
-          weight: 5,
-          opacity: 0.7,
-        },
+        style: { color: "#660066", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-23.json",
       },
       "Bus 11 (Aregua)":  {
-        style: {
-          color: "#660066",
-          weight: 5,
-          opacity: 0.7,
-        },
+        style: { color: "#660066", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-11.json",
       },
     },
@@ -99,7 +67,8 @@
         url: "https://www.example.com",
         tooltip: "I really know where my towel is",
       },
-    }
+    },
+    Weather: true,        // Add a weather widget?
 }
 // ROADMAP:  Voice: true/false 1/0 whatever
 

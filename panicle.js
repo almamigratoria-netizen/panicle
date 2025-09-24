@@ -185,3 +185,7 @@ const testicon = new L.ExtraMarkers.icon({
 let marker = new L.Marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
 marker.addTo(map);
 
+if (!!config.Weather) {
+    new L.Control.OpenMeteo().addTo(map);
+}
+
