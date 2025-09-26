@@ -24,7 +24,6 @@ L.Control.OpenMeteo = L.Control.extend({
   opacity:0.7;
   width:200px;
 }
-
 .leaflet-control-openmeteo .weatherIcon {
   float:left;
   border:1px solid #fff;
@@ -35,7 +34,6 @@ L.Control.OpenMeteo = L.Control.extend({
   margin-right:10px;
   stroke: "white";
 }
-
 .leaflet-control-openmeteo .weatherIcon img {
   float:left;
   max-width: 100% !important;
@@ -44,28 +42,49 @@ L.Control.OpenMeteo = L.Control.extend({
   stroke: white;
   stroke-width: 2px;
 }
-
 .leaflet-control-openmeteo h4 {
   font-size: 1.5em;
   text-align: center;
 }
-
 .om {
   max-width: 100% !important;
   height: 50px;
   width: 50px;
   stroke: red;
 }
-
+/* sunny */
 .om-0 {
-  stroke: white;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath fill='%23444' d='M20.406 11.656q1.813 1.781 1.813 4.375 0 2.625-1.781 4.406-1.813 1.781-4.406 1.781t-4.375-1.781q-1.813-1.781-1.813-4.406 0-2.594 1.781-4.375 1.813-1.813 4.406-1.813t4.375 1.813zM16 11.188q-2.031 0-3.438 1.375-1.406 1.406-1.406 3.469 0 2.031 1.406 3.438 1.406 1.438 3.438 1.438 2.094 0 3.469-1.406 1.406-1.438 1.406-3.469 0-2.063-1.375-3.438-1.406-1.406-3.5-1.406zM4.5 16.469q-.188-.156-.188-.438 0-.25.188-.438t.438-.188h2.875q.25 0 .406.188.188.188.188.438t-.156.438-.406.188H4.939q-.25 0-.438-.188zM24 8.875l-1.688 1.719q-.219.188-.469.188-.281 0-.469-.219-.156-.156-.156-.406 0-.281.156-.438l1.719-1.75q.188-.156.438-.156.281 0 .469.156.156.188.156.438 0 .281-.156.469zM7.844 8.438q0-.281.188-.469.156-.156.406-.156.281 0 .469.156l1.719 1.75q.156.156.156.406 0 .281-.156.438-.156.219-.438.219t-.469-.188L8.031 8.875q-.188-.188-.188-.438zM15.531 4.5q.188-.219.438-.219.281 0 .469.188.188.219.188.469v2.844q0 .25-.188.438T16 8.408t-.438-.156q-.188-.188-.188-.438V4.939q0-.25.156-.438zm0 19.344q.188-.188.438-.188.281 0 .469.188.188.219.188.469v2.844q0 .25-.188.438t-.438.188-.438-.156q-.188-.188-.188-.438v-2.875q0-.25.156-.469zm8.25-7.344q-.188-.188-.188-.469 0-.25.188-.438t.438-.188h2.875q.25 0 .406.188.188.188.188.438t-.156.438-.406.188H24.22q-.25 0-.438-.156zm.375 7.094q0 .281-.156.5-.188.156-.438.156-.281 0-.469-.156l-1.719-1.75q-.156-.156-.156-.406 0-.281.156-.438.188-.219.438-.219.281 0 .5.188L24 23.188q.156.156.156.406zm-16.125-.406 1.688-1.719q.188-.188.469-.188t.438.219q.156.156.156.406 0 .281-.156.438l-1.719 1.75q-.188.156-.438.156-.281 0-.438-.156-.188-.219-.188-.469 0-.281.188-.438z'/%3E%3C/svg%3E");
+    background-image: url('data:image/svg+xml,%3C%3Fxml version%3D"1.0" %3F%3E%3Csvg viewBox%3D"0 0 24 24" xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%3E%3Cpath%20d%3D%22M12%2017.01c2.76%200%205.01-2.25%205.01-5.01S14.76%206.99%2012%206.99%206.99%209.24%206.99%2012s2.25%205.01%205.01%205.01M12%209c1.66%200%203.01%201.35%203.01%203.01s-1.35%203.01-3.01%203.01-3.01-1.35-3.01-3.01S10.34%209%2012%209m1%2010h-2v3h2zm0-17h-2v3h2zM2%2011h3v2H2zm17%200h3v2h-3zM4.22%2018.36l.71.71.71.71%201.06-1.06%201.06-1.06-.71-.71-.71-.71-1.06%201.06zM19.78%205.64l-.71-.71-.71-.71-1.06%201.06-1.06%201.06.71.71.71.71%201.06-1.06zm-12.02.7L6.7%205.28%205.64%204.22l-.71.71-.71.71L5.28%206.7l1.06%201.06.71-.71zm8.48%2011.32%201.06%201.06%201.06%201.06.71-.71.71-.71-1.06-1.06-1.06-1.06-.71.71z%22%2F%3E%3C%2Fsvg%3E');
 }
 /* cloudy */
 .om-1, .om-2, .om-3 {
-  stroke: white;
-  background-image: url(data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%3F%3E%3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M19.62%2011.11C19.19%207.12%2015.94%204%2012%204%208.95%204%206.31%205.87%205.13%208.82%202.77%209.53%201%2011.85%201%2014.33%201%2017.45%203.44%2020%206.44%2020h12.22c2.39%200%204.33-2.02%204.33-4.5%200-2.14-1.45-3.94-3.38-4.39ZM18.67%2018H6.44C4.54%2018%203%2016.35%203%2014.33c0-1.72%201.38-3.37%203.07-3.68l.58-.11.19-.56C7.64%207.53%209.62%206%2012%206c3.12%200%205.67%202.69%205.67%206v1h1c1.29%200%202.33%201.12%202.33%202.5S19.95%2018%2018.67%2018%22%2F%3E%3C%2Fsvg%3E);
+  background-image: url('data:image/svg+xml,%3C%3Fxml version%3D"1.0" %3F%3E%3Csvg viewBox%3D"0 0 24 24" xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%3E%3Cpath stroke%3D"white" d%3D"M19.62 11.11C19.19 7.12 15.94 4 12 4 8.95 4 6.31 5.87 5.13 8.82 2.77 9.53 1 11.85 1 14.33 1 17.45 3.44 20 6.44 20h12.22c2.39 0 4.33-2.02 4.33-4.5 0-2.14-1.45-3.94-3.38-4.39ZM18.67 18H6.44C4.54 18 3 16.35 3 14.33c0-1.72 1.38-3.37 3.07-3.68l.58-.11.19-.56C7.64 7.53 9.62 6 12 6c3.12 0 5.67 2.69 5.67 6v1h1c1.29 0 2.33 1.12 2.33 2.5S19.95 18 18.67 18"%2F%3E%3C%2Fsvg%3E');
 }
+/* fog */
+.om-45, .om-48 {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9ImN1cnJlbnRDb2xvciIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNMyAxMy41YS41LjUgMCAwIDEgLjUtLjVoOWEuNS41IDAgMCAxIDAgMWgtOWEuNS41IDAgMCAxLS41LS41bTAgMmEuNS41IDAgMCAxIC41LS41aDlhLjUuNSAwIDAgMSAwIDFoLTlhLjUuNSAwIDAgMS0uNS0uNW0xMC40MDUtOS40NzNhNS4wMDEgNS4wMDEgMCAwIDAtOS40OTktMS4wMDRBMy41IDMuNSAwIDEgMCAzLjUgMTJIMTNhMyAzIDAgMCAwIC40MDUtNS45NzNNOC41IDNhNCA0IDAgMCAxIDMuOTc2IDMuNTU1LjUuNSAwIDAgMCAuNS40NDVIMTNhMiAyIDAgMCAxIDAgNEgzLjVhMi41IDIuNSAwIDEgMSAuNjA1LTQuOTI2LjUuNSAwIDAgMCAuNTk2LS4zMjlBNCA0IDAgMCAxIDguNSAzIi8+PC9zdmc+Cg==');
+}
+/* drizzle (light, moderate, and dense) */
+/* 56, 57 are freezing drizzle */
+.om-51, .om-53, .om-55, .om-56, .om-57 {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9ImN1cnJlbnRDb2xvciIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNNC4xNTggMTIuMDI1YS41LjUgMCAwIDEgLjMxNi42MzNsLS41IDEuNWEuNS41IDAgMCAxLS45NDgtLjMxNmwuNS0xLjVhLjUuNSAwIDAgMSAuNjMyLS4zMTdtMyAwYS41LjUgMCAwIDEgLjMxNi42MzNsLTEgM2EuNS41IDAgMCAxLS45NDgtLjMxNmwxLTNhLjUuNSAwIDAgMSAuNjMyLS4zMTdtMyAwYS41LjUgMCAwIDEgLjMxNi42MzNsLS41IDEuNWEuNS41IDAgMCAxLS45NDgtLjMxNmwuNS0xLjVhLjUuNSAwIDAgMSAuNjMyLS4zMTdtMyAwYS41LjUgMCAwIDEgLjMxNi42MzNsLTEgM2EuNS41IDAgMSAxLS45NDgtLjMxNmwxLTNhLjUuNSAwIDAgMSAuNjMyLS4zMTdtLjI0Ny02Ljk5OGE1LjAwMSA1LjAwMSAwIDAgMC05LjQ5OS0xLjAwNEEzLjUgMy41IDAgMSAwIDMuNSAxMUgxM2EzIDMgMCAwIDAgLjQwNS01Ljk3M004LjUgMmE0IDQgMCAwIDEgMy45NzYgMy41NTUuNS41IDAgMCAwIC41LjQ0NUgxM2EyIDIgMCAwIDEgMCA0SDMuNWEyLjUgMi41IDAgMSAxIC42MDUtNC45MjYuNS41IDAgMCAwIC41OTYtLjMyOUE0IDQgMCAwIDEgOC41IDIiLz48L3N2Zz4=');
+}
+/* Steady Rain (Slight, moderate, heavy) */
+.om-61, .om-63, .om-65 {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9ImN1cnJlbnRDb2xvciIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNNC4xNTggMTIuMDI1YS41LjUgMCAwIDEgLjMxNi42MzNsLS41IDEuNWEuNS41IDAgMCAxLS45NDgtLjMxNmwuNS0xLjVhLjUuNSAwIDAgMSAuNjMyLS4zMTdtMyAwYS41LjUgMCAwIDEgLjMxNi42MzNsLTEgM2EuNS41IDAgMCAxLS45NDgtLjMxNmwxLTNhLjUuNSAwIDAgMSAuNjMyLS4zMTdtMyAwYS41LjUgMCAwIDEgLjMxNi42MzNsLS41IDEuNWEuNS41IDAgMCAxLS45NDgtLjMxNmwuNS0xLjVhLjUuNSAwIDAgMSAuNjMyLS4zMTdtMyAwYS41LjUgMCAwIDEgLjMxNi42MzNsLTEgM2EuNS41IDAgMSAxLS45NDgtLjMxNmwxLTNhLjUuNSAwIDAgMSAuNjMyLS4zMTdtLjI0Ny02Ljk5OGE1LjAwMSA1LjAwMSAwIDAgMC05LjQ5OS0xLjAwNEEzLjUgMy41IDAgMSAwIDMuNSAxMUgxM2EzIDMgMCAwIDAgLjQwNS01Ljk3M004LjUgMmE0IDQgMCAwIDEgMy45NzYgMy41NTUuNS41IDAgMCAwIC41LjQ0NUgxM2EyIDIgMCAwIDEgMCA0SDMuNWEyLjUgMi41IDAgMSAxIC42MDUtNC45MjYuNS41IDAgMCAwIC41OTYtLjMyOUE0IDQgMCAwIDEgOC41IDIiLz48L3N2Zz4K');
+}
+/* Freezing Rain */
+.om-66, .om-67 {
+  background-image: url('data:image/svg+xml,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 16 16"%3E%3Cpath d%3D"M13.405 4.027a5.001 5.001 0 0 0-9.499-1.004A3.5 3.5 0 1 0 3.5 10H13a3 3 0 0 0 .405-5.973M8.5 1a4 4 0 0 1 3.976 3.555.5.5 0 0 0 .5.445H13a2 2 0 0 1 0 4H3.5a2.5 2.5 0 1 1 .605-4.926.5.5 0 0 0 .596-.329A4 4 0 0 1 8.5 1M2.375 13.5a.25.25 0 0 1 .25.25v.57l.501-.287a.25.25 0 0 1 .248.434l-.495.283.495.283a.25.25 0 0 1-.248.434l-.501-.286v.569a.25.25 0 1 1-.5 0v-.57l-.501.287a.25.25 0 0 1-.248-.434l.495-.283-.495-.283a.25.25 0 0 1 .248-.434l.501.286v-.569a.25.25 0 0 1 .25-.25m1.849-2.447a.5.5 0 0 1 .223.67l-.5 1a.5.5 0 1 1-.894-.447l.5-1a.5.5 0 0 1 .67-.223zM6.375 13.5a.25.25 0 0 1 .25.25v.57l.501-.287a.25.25 0 0 1 .248.434l-.495.283.495.283a.25.25 0 0 1-.248.434l-.501-.286v.569a.25.25 0 1 1-.5 0v-.57l-.501.287a.25.25 0 0 1-.248-.434l.495-.283-.495-.283a.25.25 0 0 1 .248-.434l.501.286v-.569a.25.25 0 0 1 .25-.25m1.849-2.447a.5.5 0 0 1 .223.67l-.5 1a.5.5 0 1 1-.894-.447l.5-1a.5.5 0 0 1 .67-.223zm2.151 2.447a.25.25 0 0 1 .25.25v.57l.501-.287a.25.25 0 0 1 .248.434l-.495.283.495.283a.25.25 0 0 1-.248.434l-.501-.286v.569a.25.25 0 1 1-.5 0v-.57l-.501.287a.25.25 0 0 1-.248-.434l.495-.283-.495-.283a.25.25 0 0 1 .248-.434l.501.286v-.569a.25.25 0 0 1 .25-.25m1.849-2.447a.5.5 0 0 1 .223.67l-.5 1a.5.5 0 1 1-.894-.447l.5-1a.5.5 0 0 1 .67-.223z"%2F%3E%3C%2Fsvg%3E');
+}
+/* Snowfall (slight, moderate, heavy) */
+.om-71, .om-73, .om-75, .om-77, .om-85, .om-86 {
+  background-image: url('data:image/svg+xml,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" fill%3D"currentColor" viewBox%3D"0 0 16 16"%3E%3Cpath d%3D"M8 16a.5.5 0 0 1-.5-.5v-1.293l-.646.647a.5.5 0 0 1-.707-.708L7.5 12.793V8.866l-3.4 1.963-.496 1.85a.5.5 0 1 1-.966-.26l.237-.882-1.12.646a.5.5 0 0 1-.5-.866l1.12-.646-.884-.237a.5.5 0 1 1 .26-.966l1.848.495L7 8 3.6 6.037l-1.85.495a.5.5 0 0 1-.258-.966l.883-.237-1.12-.646a.5.5 0 1 1 .5-.866l1.12.646-.237-.883a.5.5 0 1 1 .966-.258l.495 1.849L7.5 7.134V3.207L6.147 1.854a.5.5 0 1 1 .707-.708l.646.647V.5a.5.5 0 1 1 1 0v1.293l.647-.647a.5.5 0 1 1 .707.708L8.5 3.207v3.927l3.4-1.963.496-1.85a.5.5 0 1 1 .966.26l-.236.882 1.12-.646a.5.5 0 0 1 .5.866l-1.12.646.883.237a.5.5 0 1 1-.26.966l-1.848-.495L9 8l3.4 1.963 1.849-.495a.5.5 0 0 1 .259.966l-.883.237 1.12.646a.5.5 0 0 1-.5.866l-1.12-.646.236.883a.5.5 0 1 1-.966.258l-.495-1.849-3.4-1.963v3.927l1.353 1.353a.5.5 0 0 1-.707.708l-.647-.647V15.5a.5.5 0 0 1-.5.5z"%2F%3E%3C%2Fsvg%3E');
+}
+/* Rain showers (Slight, moderate, violent) */
+.om-80, .om-81, .om-82 {}
+/* Thunderstorm */
+.om-95, .om-96, .om-99 {}
 `;
         // According to caniuse.com this should work on 99.32% of the world.  
         try {
@@ -122,8 +141,7 @@ L.Control.OpenMeteo = L.Control.extend({
                     "N", "NE", "E", "SE", "S", "SW", "W", "NW" 
                 ];
             } else {
-                // FIXME: ??If "wdirs", convert to Array??
-                console.log("Need to parse wind_directions");
+                this.options.wdirs = this.option.wind_drections; 
             }
         }
     },
@@ -133,7 +151,7 @@ L.Control.OpenMeteo = L.Control.extend({
         this.writeCSS();
         this._div = this.control_template();
         map.on("moveend", this.refresh, this);  
-        // Wall/MagicMirror displays might never get panned, so
+        // Wall/MagicMirror displays might never get panned, so...
         window.setInterval(this.refresh.bind(this), 3600000);
         this.refresh(); // Initialize the data
         return this._div;
@@ -180,7 +198,8 @@ L.Control.OpenMeteo = L.Control.extend({
         }
         this._img.classList.add('om');
         this._img.classList.add(imgClass);
-        console.log(this._img);
+        // this._img.classList.add('om-71');
+        console.log(current.weather_code);
     },
 
     mapWindDirection: function(degrees) {

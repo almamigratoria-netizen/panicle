@@ -3,22 +3,22 @@ A [leaflet](https://leafletjs.com) plugin to display weather using
 the [Open-Meteo API](https://www.open-meteo.org).  It was inspired by
 the [ Leaflet.Weather ](https://github.com/oskosk/Leaflet.Weather) plugin.  
 Primary differences are that Leaflet.OpenMeteo has no dependancies 
-(no JQuery), doesn't require an API key (for most use cases), and 
-(hopefully) will be Leaflet version 2 compatible. 
+(no JQuery), the Open-Meteo api doesn't require an API key (for non-
+commerial use), and (hopefully) will be Leaflet version 2 compatible. 
 
 [<img src="screenshot.png">](https://oskosk.github.io/Leaflet.Weather)
 
 ## Example
 ``` javascript
-    // Create a map in the "map" div, set the view to a given place and zoom
-     map = L.map('map').setView([-51.5, 0.1], 13);
+    // Create a map in the "map" div, set the view to Berlin
+     map = L.map('map').setView([52.5, 13.4], 13);
 
     // add an OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     }).addTo(map);
 
     // add the weather control
-    new L.Control.Weather({ }).addTo(map);
+    new L.Control.Weather().addTo(map);
 
     // You can add multiple instances.
     // Add a control for London
@@ -29,7 +29,7 @@ Primary differences are that Leaflet.OpenMeteo has no dependancies
 ```
 
 ## Installation
-Just include the JS in your HTML.  The CSS is built in.
+Just include the JS in your HTML.  The CSS is in the javascript file.  The method used to inject the CSS might (or might not) work on non-evergreen browsers.
 ```html
     <script src="Leaflet.OpenMeteo.min.js"></script>
 ```
@@ -39,6 +39,11 @@ Just include the JS in your HTML.  The CSS is built in.
 * `title` - Title for control.  Defaults to "OpenMeteo".  Useful when creating multiple instances.
 * `location` - Not to be confused with `position`, this is the lat/lng from where you want the weather.  Defaults to the center of the map.  Useful when creating multiple instances.
 * ROADMAP -- allow you to translate wind directions to things like "SE", etc
+
+## Weird design choices
+* The cool kids these days say "don't use webfonts, use SVG's".  I'm not sure I agree, but I'm trying it out in this project.  Turns out I've got a lot to learn about how to use SVG's, but I'll get there.
+* Putting the CSS in the javascript file.  I've just never liked having to load two files (the CSS in the head, and the javascript at the end of the body) in my HTML.  Seems like a real chore.  So... one file.  No brainer.
+
 
 ## Useful links
 - [Code table 4677](https://www.nodc.noaa.gov/archive/arc0021/0002199/1.1/data/0-data/HTML/WMO-CODE/WMO4677.HTM)
