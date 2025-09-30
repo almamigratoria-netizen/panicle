@@ -60,6 +60,13 @@ async function Ajax(method, url, options={}) {
 
 // Load data from JSON[5] files specified in the config file
 async function Load_Data(key, s) {
+    // FIXME:  Figure out how to convert Open Location codes
+    //         (aka Google Plus Codes).  See https://plus.codes
+    //         For reference, Google's AI says Asuncion Paraguay is
+    //         -25.2637° latitud sur, -57.5759° longitud oeste, which
+    //         I'm (currently) at 5864P968+VQ, or a P968+VQ, Asuncion Paraguay
+    //         OK... block 58 is this region of South America, not sure what
+    //         the 64 means, but I think it's square 64 of box 58.
     try {
         let o = await Ajax('GET', s);
         let A = [];
@@ -135,8 +142,8 @@ async function Load_Map() {
     map.setView([lat, lon], 15);
 
     // Config might want a list of map layers
-    const OSMUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-    const OSM = new L.TileLayer(OSMUrl);
+    const OSMUrl = 'https://{s}.tile.osm.org/{z}/{x}/{y}.png';
+    const OSM = new L.TileLayer(OSMUrl, {detectRetina: true});
     OSM.addTo(map);
 
     // Create a layerGroup object (lgo) that has key:value pairs contaiing

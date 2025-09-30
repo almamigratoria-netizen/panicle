@@ -2,20 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Leaflet and Bootstrap map">
+    <meta name="author" content="Wandering Soul">
     <title>BootLeaf</title>
 
     <link rel="stylesheet" href="libs/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="libs/leaflet/dist/leaflet.css">
+    <!--
     <link rel="stylesheet" href="libs/webfonts/css/font-awesome.css">
+    -->
     <link rel="stylesheet" href="libs/webfonts/css/boxicons.css">
     <link rel="stylesheet" href="libs/Leaflet-ExtraMarkers/css/leaflet.extra-markers.min.css">
+    <!-- FIXME:  Let's get an SVG icon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style> 
       html { height: 100%; }
@@ -31,10 +33,10 @@
   <body>
     <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div class="container-fluid">
-        <a class="navbar-brand" 
+        <span class="navbar-brand" 
            href="#"
            id="navbar_logo">Navbar
-        </a>
+        </span>
         <button class="navbar-toggler" 
                 type="button" 
                 data-bs-toggle="collapse" 
@@ -47,21 +49,21 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle"
+              <span class="nav-link dropdown-toggle"
                  href="#" role="button"
                  data-bs-toggle="dropdown">Links
-              </a>
+              </span>
               <ul class="dropdown-menu" id='links_dropdown'>
                 <!-- Links get filled in when we parse the config file -->
               </ul>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" 
+              <span class="nav-link dropdown-toggle" 
                  href="#" 
                  role="button" 
                  data-bs-toggle="dropdown" 
                  aria-expanded="false"> Info 
-              </a>
+              </span>
               <ul class="dropdown-menu">
                 <li>
                   <span class="dropdown-item" 
@@ -91,6 +93,7 @@
             </li>
           </ul>
           <!-- ROADMAP: Maybe a microphone icon so we can voice search -->
+          <!--          So... find a good SVG for a microphone         -->
           <form class="d-flex" role="search">
             <input class="form-control me-2" 
                    type="search" 
