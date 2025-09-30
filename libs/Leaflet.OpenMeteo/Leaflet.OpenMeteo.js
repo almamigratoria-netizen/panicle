@@ -1,14 +1,5 @@
 //
 //    Leaflet.Open-Meteo.js
-//   
-//    Make sure this is 2.0 ready.  Means we need to esm it
-//    How do you use node to make a dist folder and stuff?
-
-//    For the icons, is it better to inline them?  DataURI?  defs?
-//    Learn more about SVG's.
-//    we have options: boxicons, bootstrap icons, etc.  Extract the 
-//    svg data, make SURE we include license info/link (perhaps in the
-//    README.md)
 //
 
 L.Control.OpenMeteo = L.Control.extend({
@@ -26,20 +17,16 @@ L.Control.OpenMeteo = L.Control.extend({
 }
 .leaflet-control-openmeteo .weatherIcon {
   float:left;
-  border:1px solid #fff;
-  font-size:2.5em;
+  border:1px solid #555;
   width:50px;
   height:50px;
-  text-align:center;
   margin-right:10px;
-  stroke: "white";
 }
 .leaflet-control-openmeteo .weatherIcon img {
   float:left;
   max-width: 100% !important;
   height: 50px;
   width: 50px;
-  stroke: white;
   stroke-width: 2px;
 }
 .leaflet-control-openmeteo h4 {
@@ -50,7 +37,6 @@ L.Control.OpenMeteo = L.Control.extend({
   max-width: 100% !important;
   height: 50px;
   width: 50px;
-  stroke: red;
 }
 /* sunny */
 .om-0 {
@@ -82,11 +68,16 @@ L.Control.OpenMeteo = L.Control.extend({
   background-image: url('data:image/svg+xml,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" fill%3D"currentColor" viewBox%3D"0 0 16 16"%3E%3Cpath d%3D"M8 16a.5.5 0 0 1-.5-.5v-1.293l-.646.647a.5.5 0 0 1-.707-.708L7.5 12.793V8.866l-3.4 1.963-.496 1.85a.5.5 0 1 1-.966-.26l.237-.882-1.12.646a.5.5 0 0 1-.5-.866l1.12-.646-.884-.237a.5.5 0 1 1 .26-.966l1.848.495L7 8 3.6 6.037l-1.85.495a.5.5 0 0 1-.258-.966l.883-.237-1.12-.646a.5.5 0 1 1 .5-.866l1.12.646-.237-.883a.5.5 0 1 1 .966-.258l.495 1.849L7.5 7.134V3.207L6.147 1.854a.5.5 0 1 1 .707-.708l.646.647V.5a.5.5 0 1 1 1 0v1.293l.647-.647a.5.5 0 1 1 .707.708L8.5 3.207v3.927l3.4-1.963.496-1.85a.5.5 0 1 1 .966.26l-.236.882 1.12-.646a.5.5 0 0 1 .5.866l-1.12.646.883.237a.5.5 0 1 1-.26.966l-1.848-.495L9 8l3.4 1.963 1.849-.495a.5.5 0 0 1 .259.966l-.883.237 1.12.646a.5.5 0 0 1-.5.866l-1.12-.646.236.883a.5.5 0 1 1-.966.258l-.495-1.849-3.4-1.963v3.927l1.353 1.353a.5.5 0 0 1-.707.708l-.647-.647V15.5a.5.5 0 0 1-.5.5z"%2F%3E%3C%2Fsvg%3E');
 }
 /* Rain showers (Slight, moderate, violent) */
-.om-80, .om-81, .om-82 {}
+.om-80, .om-81, .om-82 {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZD0iTTQuMTc2IDExLjAzMmEuNS41IDAgMCAxIC4yOTIuNjQzbC0xLjUgNGEuNS41IDAgMSAxLS45MzYtLjM1bDEuNS00YS41LjUgMCAwIDEgLjY0NC0uMjkzbTMgMGEuNS41IDAgMCAxIC4yOTIuNjQzbC0xLjUgNGEuNS41IDAgMSAxLS45MzYtLjM1bDEuNS00YS41LjUgMCAwIDEgLjY0NC0uMjkzbTMgMGEuNS41IDAgMCAxIC4yOTIuNjQzbC0xLjUgNGEuNS41IDAgMSAxLS45MzYtLjM1bDEuNS00YS41LjUgMCAwIDEgLjY0NC0uMjkzbTMgMGEuNS41IDAgMCAxIC4yOTIuNjQzbC0xLjUgNGEuNS41IDAgMCAxLS45MzYtLjM1bDEuNS00YS41LjUgMCAwIDEgLjY0NC0uMjkzbS4yMjktNy4wMDVhNS4wMDEgNS4wMDEgMCAwIDAtOS40OTktMS4wMDRBMy41IDMuNSAwIDEgMCAzLjUgMTBIMTNhMyAzIDAgMCAwIC40MDUtNS45NzNNOC41IDFhNCA0IDAgMCAxIDMuOTc2IDMuNTU1LjUuNSAwIDAgMCAuNS40NDVIMTNhMiAyIDAgMCAxIDAgNEgzLjVhMi41IDIuNSAwIDEgMSAuNjA1LTQuOTI2LjUuNSAwIDAgMCAuNTk2LS4zMjlBNCA0IDAgMCAxIDguNSAxIi8+PC9zdmc+Cg==');
+}
 /* Thunderstorm */
-.om-95, .om-96, .om-99 {}
+.om-95, .om-96, .om-99 {
+  background-image: url('data:image/svg+xml,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 16 16"%3E%3Cpath d%3D"M2.658 11.026a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m-7.5 1.5a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m-.753-8.499a5.001 5.001 0 0 0-9.499-1.004A3.5 3.5 0 1 0 3.5 10H13a3 3 0 0 0 .405-5.973M8.5 1a4 4 0 0 1 3.976 3.555.5.5 0 0 0 .5.445H13a2 2 0 0 1 0 4H3.5a2.5 2.5 0 1 1 .605-4.926.5.5 0 0 0 .596-.329A4 4 0 0 1 8.5 1M7.053 11.276A.5.5 0 0 1 7.5 11h1a.5.5 0 0 1 .474.658l-.28.842H9.5a.5.5 0 0 1 .39.812l-2 2.5a.5.5 0 0 1-.875-.433L7.36 14H6.5a.5.5 0 0 1-.447-.724z"%2F%3E%3C%2Fsvg%3E');
+}
 `;
-        // According to caniuse.com this should work on 99.32% of the world.  
+        // According to caniuse.com this should work on 92.98%% of the world.  
+        // Since Leaflet version 2 is only targeted at evergreen, we're good.
         try {
             const sheet = new CSSStyleSheet();
             sheet.replaceSync(our_CSS);
@@ -133,7 +124,7 @@ L.Control.OpenMeteo = L.Control.extend({
     tweakConfig: function() {
         if (this.options.center) {
             let p = this.options.center;
-            this.options.center = new L.latLng(p[0], [1]);
+            this.options.center = new L.LatLng(p[0], [1]);
         }
         if (this.options.wind_directions) {
             if (this.options.wind_directions.toLowerCase() == "default") {
@@ -196,10 +187,38 @@ L.Control.OpenMeteo = L.Control.extend({
                 this._img.classList.remove(c);
             }
         }
-        this._img.classList.add('om');
         this._img.classList.add(imgClass);
-        // this._img.classList.add('om-71');
-        console.log(current.weather_code);
+
+        // To access __all__ styleSheets, you have to look at
+        // document.styleSheets, document.adoptedStyleSheets, and
+        // shadowRoot.adoptedStyleSheets.  I think.
+        function verifyStyle(selector) {
+            let haveRule = false;
+            const pattern = selector + "\\s*,?";
+            const re = new RegExp(pattern);
+            if (typeof document.adoptedStyleSheets !== "undefined") {
+                const cssSheets = document.adoptedStyleSheets;
+                outerloop: for (let i = 0; i < cssSheets.length; i++) {
+                    const rules = cssSheets[i].cssRules || cssSheets[i].rules;
+                    for (let j = 0; j < rules.length; j++) {
+                        rtt = rules[j].selectorText;
+                        const match = re.exec(rtt);
+                        if (match) {
+                            haveRule = true;
+                            break outerloop;
+                        }
+                    }
+                }
+            }
+            return haveRule;
+        }
+
+        const classExists = verifyStyle(imgClass);
+        if (!classExists) {
+            const msg = `No icon for ${imgClass} (${current.weather_code})`;
+            console.error(msg);
+            alert(msg);
+        }
     },
 
     mapWindDirection: function(degrees) {
@@ -212,7 +231,3 @@ L.Control.OpenMeteo = L.Control.extend({
     }
 });
 
-// For 2.0, get rid of the factory method
-L.control.weather = function(options) {
-    return new L.Control.Weather(options);
-};

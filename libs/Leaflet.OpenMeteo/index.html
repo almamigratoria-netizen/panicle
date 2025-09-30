@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Leaflet.OpenMeteo demo page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/2.0.0-alpha.1/leaflet.css">
+    <style>
+      html, body, #mapdiv {
+        height: 100%;
+        width: 100%;
+        padding: 0px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mapdiv"></div>
+    <!-- Chances are if you're adding plugins, you're likely using 
+         plugins that aren't ESM ready, so we'll use the "global"
+         version for better compatibility.
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/2.0.0-alpha.1/leaflet-global-src.js"></script>
+    <script src="./Leaflet.OpenMeteo.js"></script>
+    <script>
+      // Create a map in the "map" div, set the view to Berlin
+      const map = new L.Map('mapdiv').setView([52.5, 13.4], 13);
+
+      // add an OpenStreetMap tile layer
+      new L.TileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+
+      // add the weather control that displays the weather 
+      // at the center of the map
+      new L.Control.OpenMeteo().addTo(map);
+
+      // You can add multiple instances.
+      // Add a control for London
+      new L.Control.OpenMeteo({
+        title: "London",
+        center: [51.5, -0.1],
+      }).addTo(map);
+    </script>
+  </body>
+</html>
+

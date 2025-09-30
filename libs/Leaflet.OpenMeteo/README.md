@@ -1,28 +1,27 @@
 # Leaflet.OpenMeteo
 A [leaflet](https://leafletjs.com) plugin to display weather using
-the [Open-Meteo API](https://www.open-meteo.org).  It was inspired by
+the [Open-Meteo API](https://www.open-meteo.com).  It was inspired by
 the [ Leaflet.Weather ](https://github.com/oskosk/Leaflet.Weather) plugin.  
 Primary differences are that Leaflet.OpenMeteo has no dependancies 
 (no JQuery), the Open-Meteo api doesn't require an API key (for non-
 commerial use), and (hopefully) will be Leaflet version 2 compatible. 
 
-[<img src="screenshot.png">](https://oskosk.github.io/Leaflet.Weather)
+[<img src="screenshot.png">](./screenshot.png)
 
 ## Example
 ``` javascript
     // Create a map in the "map" div, set the view to Berlin
-     map = L.map('map').setView([52.5, 13.4], 13);
+     map = new L.Map('map').setView([52.5, 13.4], 13);
 
     // add an OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    }).addTo(map);
+    new L.TileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 
-    // add the weather control
-    new L.Control.Weather().addTo(map);
+    // add the weather control that displays the weather at the center of the map
+    new L.Control.OpenMeteo().addTo(map);
 
     // You can add multiple instances.
     // Add a control for London
-    new L.Control.Weather({
+    new L.Control.OpenMeteo({
         title: "London",
         center: [51.5, -0.1],
     }).addTo(map);
@@ -35,19 +34,17 @@ Just include the JS in your HTML.  The CSS is in the javascript file.  The metho
 ```
 
 ### Options
-* `position` - Leaflet [position option](http://leafletjs.com/reference.html#control-options) for Controls.
+* `position` - Leaflet [position option](https://leafletjs.com/reference.html#control-position) for Controls.
 * `title` - Title for control.  Defaults to "OpenMeteo".  Useful when creating multiple instances.
 * `location` - Not to be confused with `position`, this is the lat/lng from where you want the weather.  Defaults to the center of the map.  Useful when creating multiple instances.
-* ROADMAP -- allow you to translate wind directions to things like "SE", etc
+* `wind_directions` - options are:
+  * if undefined or ommitted, wind direction displayed in degrees
+  * an array of strings representing evenly spaced directions (starting at north, rotating clockwise).  You can use this to get directons like "NNE", or things like `["Βορέας", "Εὖρος", "Νότος", "Ζέφυρος"]` if you're an ancient Greek sailor.
+  * `default` - a pre-defined array `[ "N", "NE", "E", "SE", "S", "SW", "W", "NW" ]`
 
 ## Weird design choices
-* The cool kids these days say "don't use webfonts, use SVG's".  I'm not sure I agree, but I'm trying it out in this project.  Turns out I've got a lot to learn about how to use SVG's, but I'll get there.
-* Putting the CSS in the javascript file.  I've just never liked having to load two files (the CSS in the head, and the javascript at the end of the body) in my HTML.  Seems like a real chore.  So... one file.  No brainer.
-
-
-## Useful links
-- [Code table 4677](https://www.nodc.noaa.gov/archive/arc0021/0002199/1.1/data/0-data/HTML/WMO-CODE/WMO4677.HTM)
-- [GOES Satellite Imagery](https://www.star.nesdis.noaa.gov/GOES/)
+* The cool kids these days say "don't use webfonts, use SVG's".  I'm not sure I agree, but I'm trying it out in this project.  Turns out I've got a lot to learn about how to use SVG's, but I'll get there.  Feel free to tweak it.
+* Putting the CSS right in the javascript file and using [adoptedStyleSheets](https://caniuse.com/?search=adoptedStyleSheets).  Only one file to load or customize, and Leaflet version 2 doesn't plan to support broken browsers, so this seemed like the way to go.
 
 ## License
 The Leaflet.OpenMeteo plugin is released under the [MIT License](https://opensource.org/license/mit)<br/>
