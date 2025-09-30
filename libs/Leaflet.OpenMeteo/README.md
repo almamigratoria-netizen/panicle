@@ -7,6 +7,8 @@ Primary differences are that Leaflet.OpenMeteo has no dependancies
 commerial use), and (hopefully) will be Leaflet version 2 compatible. 
 
 [<img src="screenshot.png">](./screenshot.png)
+<br/>
+[Live Demo](https://almamigratoria-netizen.github.io/Leaflet.OpenMeteo/)
 
 ## Example
 ``` javascript
