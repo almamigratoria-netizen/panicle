@@ -16,44 +16,28 @@
 import config from "./config.js";
 // Add click handlers to items on the navbar
 import navbar from "./navbar.js";
+import L from "./libs/leaflet/dist/leaflet.js";
 
-// As written, this function throws error.  We might want to catch
-// them internally so this will be easier to put in a module.
-async function Ajax(method, url, options={}) {
-    let fetch_options = options || {};
-    if (method.toLowerCase() == 'post') {
-        // jwt = localStorage.getItem('jwt_token');
-        // fetch_options.headers = {'Authorization': 'Bearer ' + jwt};
-        fetch_options.method = 'post';
-        fetch_options.body = options.body;
-    }
+async function Ajax(method, url) {
     // ROADMAP:  Add a timeout (AbortController)
-    const response = await fetch(url, fetch_options);
+    let response;
+    try {
+        response = await fetch(url);
+    } catch(e) {
+        console.error(`fetch ${url}: ${e.message}`);
+        return null;
+    }
     if (!response.ok) {
-        // this means the rquest completes poorly.
-        const e = {
-            title: 'fetch error',
-            message: response.statusText || 'Unknown error',
-        };
-        console.error(e);
-        throw new Error(e);
+        console.error(`fetch ${url}: ${response.statusText}`);
+        return null;
     }
     let j = await response.text();
-
-    // convert weird response.headers object to normal object
-    let headers = {};
-    for (var pair of response.headers.entries()) {
-        headers[pair[0]] = pair[1];
-    }
-    // If we received JSON, parse it.
-    if (headers['content-type'].startsWith('application/json')) {
-        try {
-            const j5 = JSON5.parse(j);
-            j = j5;
-        } catch (error) {
-            console.error("Error parsing json", url);
-            console.error(error.message);
-        }
+    // Try to parse as JSON, return text on exception
+    try {
+        const j5 = JSON5.parse(j);
+        j = j5;
+    } catch (error) {
+        console.warn(error.message);
     }
     return j;
 }
@@ -61,12 +45,6 @@ async function Ajax(method, url, options={}) {
 // Load data from JSON[5] files specified in the config file
 async function Load_Data(key, s) {
     // FIXME:  Figure out how to convert Open Location codes
-    //         (aka Google Plus Codes).  See https://plus.codes
-    //         For reference, Google's AI says Asuncion Paraguay is
-    //         -25.2637° latitud sur, -57.5759° longitud oeste, which
-    //         I'm (currently) at 5864P968+VQ, or a P968+VQ, Asuncion Paraguay
-    //         OK... block 58 is this region of South America, not sure what
-    //         the 64 means, but I think it's square 64 of box 58.
     try {
         let o = await Ajax('GET', s);
         let A = [];
@@ -81,12 +59,12 @@ async function Load_Data(key, s) {
 
             // the "marker" option
             let custom_icon = new L.Icon.Default();
-            if (d.marker) {
-                const m = {...defaultMarker, ...d.marker};
-                // FIXME: Turns out I don't like ExtraMarkers much.
-                // Find a better library
-                custom_icon = new L.ExtraMarkers.icon(m);
-            }
+            //if (d.marker) {
+            //    const m = {...defaultMarker, ...d.marker};
+            //    // FIXME: Turns out I don't like ExtraMarkers much.
+            //    // Find a better library
+            //    custom_icon = new L.ExtraMarkers.icon(m);
+            //}
             let m = new L.Marker(d.Location, {icon: custom_icon});
 
             // the "url" option
@@ -102,7 +80,7 @@ async function Load_Data(key, s) {
         }
         return new L.LayerGroup(A);
     } catch(e) {
-        console.error("Load_Data: error = ", e);
+        console.error(`Load_Data: error ${e.message}`);
     }
 }
 
@@ -153,7 +131,7 @@ async function Load_Map() {
         for (var key in config.Data) {
             // Create layer group for each data file
             let layer = await Load_Data(key, config.Data[key]);
-            if (Object.keys(layer).length) {
+            if (layer && Object.keys(layer).length) {
                 lgo[key] = layer;
             }
         }
@@ -161,7 +139,7 @@ async function Load_Map() {
     if (config.GeoJSON) {
         for (var key in config.GeoJSON) {
             let layer = await Load_geoJSON(key, config.GeoJSON[key]);
-            if (Object.keys(layer).length) {
+            if (layer && Object.keys(layer).length) {
                 lgo[key] = layer;
             }
         }
@@ -181,18 +159,32 @@ async function Load_Map() {
 
 let map = await Load_Map();
 
+import OpenMeteo from "./libs/Leaflet.OpenMeteo/leaflet.OpenMeteo.mjs";
+new OpenMeteo().addTo(map);
+
+//if (!!config.Weather) {
+//    let OM_url = "./libs/Leaflet.OpenMeteo/leaflet.OpenMeteo.mjs";
+//    let OM = import(OM_url);
+//    OM.then((response) => {
+//        console.log(`import() ok: ${response}`);
+//    })
+//    .catch((error) => {
+//        console.log(`import() failed: ${error}`);
+//    })
+//    // new L.Control.OpenMeteo().addTo(map)//;
+//}
+
+
 // For this to work, need to import at least one glyphicon css file
 // FIXME:  We should be riding the wave and use SVG's instead.
-const testicon = new L.ExtraMarkers.icon({
-    icon: 'bx-bed-alt',
-    markerColor: 'blue',
-    shape: 'square',
-    prefix: 'bx,'
-});
-let marker = new L.Marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
+// I think L.ExtraMarkers might not work with Leaflet 2.
+//const testicon = new L.ExtraMarkers.icon({
+//    icon: 'bx-bed-alt',
+//    markerColor: 'blue',
+//    shape: 'square',
+//    prefix: 'bx,'
+//});
+//let marker = new L.Marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
+let marker = new L.Marker([-25.287687,-57.633063]).bindPopup("Hostel Patagonia");
 marker.addTo(map);
-
-if (!!config.Weather) {
-    new L.Control.OpenMeteo().addTo(map);
-}
 

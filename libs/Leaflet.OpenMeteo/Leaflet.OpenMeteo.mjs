@@ -1,23 +1,23 @@
 //
-//    Leaflet.Open-Meteo.js
+//    Leaflet.Open-Meteo.mjs
 //
-
 // If I'm publishing a module, how do I know *where* the end
 // user has put leaflet?  Is there some magic at work?
-console.log("OpenMeteo:", document.currentScript);
-//if (document.currentScript === null) {
-//    import L from "leaflet";  throws a Syntax error when the
-//                              script is loaded NOT as a module
-//    const {x} = await import("leaflet"); should work, but need to 
-//                              refactor this so the control gets exported
-//                              ...hmmm... how to emulate "export"
-//}
 
-L.Control.OpenMeteo = L.Control.extend({
-    // I've always wondered why we load CSS in our HTML when
-    // it's just as easy to simply include it in your javascript.
+// Do as much tree shaking as we can...
+import {Control, LatLng} from "/libs/leaflet/dist/leaflet.js";
+
+export default class OpenMeteo extends Control {
+    // With evergreen browsers, we don't need external CSS
     // 
-    writeCSS: function() {
+    // Question:  Do multiple instances write multiple CSS sheets?
+    //            should only need one.
+
+    static {
+        // Not sure what should go here
+    }
+
+    _writeCSS() {
         const our_CSS = `
 .leaflet-control-openmeteo {
   color:#eee;
@@ -87,52 +87,59 @@ L.Control.OpenMeteo = L.Control.extend({
   background-image: url('data:image/svg+xml,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 16 16"%3E%3Cpath d%3D"M2.658 11.026a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m-7.5 1.5a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m-.753-8.499a5.001 5.001 0 0 0-9.499-1.004A3.5 3.5 0 1 0 3.5 10H13a3 3 0 0 0 .405-5.973M8.5 1a4 4 0 0 1 3.976 3.555.5.5 0 0 0 .5.445H13a2 2 0 0 1 0 4H3.5a2.5 2.5 0 1 1 .605-4.926.5.5 0 0 0 .596-.329A4 4 0 0 1 8.5 1M7.053 11.276A.5.5 0 0 1 7.5 11h1a.5.5 0 0 1 .474.658l-.28.842H9.5a.5.5 0 0 1 .39.812l-2 2.5a.5.5 0 0 1-.875-.433L7.36 14H6.5a.5.5 0 0 1-.447-.724z"%2F%3E%3C%2Fsvg%3E');
 }
 `;
-        // According to caniuse.com this should work on 92.98%% of the world.  
-        // Since Leaflet version 2 is only targeted at evergreen, we're good.
         try {
             const sheet = new CSSStyleSheet();
             sheet.replaceSync(our_CSS);
             document.adoptedStyleSheets.push(sheet);
         } catch (e) {
             // The rest, well... 
-            console.warn("You should replace your browser", e.message);
+            console.warn("You should replace your broken browser", e.message);
         }
-    },
+    };
 
-    control_template: function() {
+
+    _control_template() {
+        // Easier to define the function ourselves than to import from leaflet
+        function create(tag, className='', mama=undefined) {
+            const el = document.createElement(tag);
+            el.className = className;
+            mama?.appendChild(el);
+            return el;
+        };
+
         // This would be easier if I let myself use .innerHTML, but....
-        const cdiv = L.DomUtil.create('div', 'leaflet-control-openmeteo');
-        const titlediv = L.DomUtil.create('h4', '', cdiv);
+        const cdiv = create('div', 'leaflet-control-openmeteo');
+        const titlediv = create('h4', '', cdiv);
         titlediv.textContent = this.options.title;
-        const idiv = L.DomUtil.create('div', '', cdiv);
-        const img = L.DomUtil.create('img', 'weatherIcon', idiv);
+        const idiv = create('div', '', cdiv);
+        const img = create('img', 'weatherIcon', idiv);
         this._img = img;
-        const tdiv = L.DomUtil.create('div', '', cdiv);
-        let s1 = L.DomUtil.create('span', '', tdiv);
+        const tdiv = create('div', '', cdiv);
+        let s1 = create('span', '', tdiv);
         s1.textContent = "T: ";
-        let s2 = L.DomUtil.create('span', '', tdiv);
+        let s2 = create('span', '', tdiv);
         s2.textContent = "{temp}";
         this._tspan = s2;
-        const hdiv = L.DomUtil.create('div', '', cdiv);
-        s1 = L.DomUtil.create('span', '', hdiv);
+        const hdiv = create('div', '', cdiv);
+        s1 = create('span', '', hdiv);
         s1.textContent = "H: ";
-        s2 = L.DomUtil.create('span', '', hdiv);
+        s2 = create('span', '', hdiv);
         s2.textContent = "{RH}";
         this._hspan = s2;
-        const wdiv = L.DomUtil.create('div', '', cdiv);
-        s1 = L.DomUtil.create('span', '', wdiv);
+        const wdiv = create('div', '', cdiv);
+        s1 = create('span', '', wdiv);
         s1.textContent = "{wind}";
         this._wspan = s1;
 
         return cdiv;
-    },
+    };
 
-    options: {
+    options = {
         position: "bottomleft",
         title: "Open-Meteo",
-    },
+    };
 
-    tweakConfig: function() {
+    _tweakConfig() {
         if (this.options.center) {
             let p = this.options.center;
             this.options.center = new L.LatLng(p[0], [1]);
@@ -146,20 +153,21 @@ L.Control.OpenMeteo = L.Control.extend({
                 this.options.wdirs = this.option.wind_drections; 
             }
         }
-    },
+    };
 
-    onAdd: function(map) {
-        this.tweakConfig();
-        this.writeCSS();
-        this._div = this.control_template();
+    onAdd(map) {
+        // do I need "this"?
+        this._tweakConfig();
+        this._writeCSS();
+        this._div = this._control_template();
         map.on("moveend", this.refresh, this);  
         // Wall/MagicMirror displays might never get panned, so...
         window.setInterval(this.refresh.bind(this), 3600000);
         this.refresh(); // Initialize the data
         return this._div;
-    },
+    };
 
-    refresh: async function(e) {
+    async refresh(ev) {
         function addUnits(weather_item) {
             let s = current[weather_item] + units[weather_item];
             return s;
@@ -193,7 +201,7 @@ L.Control.OpenMeteo = L.Control.extend({
         this._wspan.textContent = wind;
         const imgClass = "om-" + current.weather_code;
         const cl = this._img.classList;
-        for (c in cl) {
+        for (const c in cl) {
             if (c.startsWith("om-")) {
                 this._img.classList.remove(c);
             }
@@ -212,7 +220,7 @@ L.Control.OpenMeteo = L.Control.extend({
                 outerloop: for (let i = 0; i < cssSheets.length; i++) {
                     const rules = cssSheets[i].cssRules || cssSheets[i].rules;
                     for (let j = 0; j < rules.length; j++) {
-                        rtt = rules[j].selectorText;
+                        let rtt = rules[j].selectorText;
                         const match = re.exec(rtt);
                         if (match) {
                             haveRule = true;
@@ -230,9 +238,9 @@ L.Control.OpenMeteo = L.Control.extend({
             console.error(msg);
             alert(msg);
         }
-    },
+    };
 
-    mapWindDirection: function(degrees) {
+    mapWindDirection(degrees) {
         // Map wind direction to things like "E" and "SW"
         const tlen = this.options.wdirs.length;
         const divisor = 360 / (tlen);
@@ -240,5 +248,5 @@ L.Control.OpenMeteo = L.Control.extend({
         let d = Math.round(degrees/divisor) % (tlen);
         return this.options.wdirs[d];
     }
-});
+};
 
