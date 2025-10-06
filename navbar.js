@@ -50,7 +50,15 @@ const navbar = (function() {
 
     const item2 = function(e) {
         if (!e.target) {return;}
-        console.log(e.target.textContent.trim(), " clicked")
+        // Example of displaying a Bootstrap modal on menu click.
+        if (!e.target) {return;}
+        try {
+            const el = document.getElementById("modal_2");
+            const m = bootstrap.Modal.getOrCreateInstance(el);
+            m.show();
+        } catch(e) {
+            console.warn(e);
+        }
     };
 
     const about = function(e) {

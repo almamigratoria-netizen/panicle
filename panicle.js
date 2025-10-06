@@ -13,6 +13,7 @@
 // Even even better, make the navbar a leaflet control.
 
 // Get and parse the config file
+// import JSON5 from "./libs/json5/json5.min.js";
 import config from "./config.js";
 // Add click handlers to items on the navbar
 import navbar from "./navbar.js";
