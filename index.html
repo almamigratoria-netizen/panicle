@@ -74,7 +74,13 @@
                 <li>
                   <span class="dropdown-item" 
                         id="item2">
-                    Another action
+                    Actualizar Esto
+                  </span>
+                </li>
+                <li>
+                  <span class="dropdown-item" 
+                        id="item3">
+                    Cosas no Puedo Creer
                   </span>
                 </li>
                 <li>
@@ -141,6 +147,8 @@
 
             <h3>Busses</h3>
             Busses in town go everywhere  They don't take cash or debit.  Buy a Jaha bus card and charge it at any <b>Aqui Pago</b> or <b>Pago Express</b>. Try the farmacy on the corner (to the left when you leave the hostel). The bus in town costs 3400 ₲. There are actually two types of bus card (the other is Mas+), but Mas can pretty much only be used in Asuncion, but Jaha can be used in other towns (like Encarnacion and CDE). 
+            <h4>Bus Routes</h4>
+            Busses are weird here.  Google has bus stops marked, but unless you actually see a bus stop nearby (with roof, seats, etc), just flag the bus down.  Don't wear a baseball cap (even in the 40%deg; sun) or they might not stop for you (it's a security thing).  But be careful.  There are weird routes, like 12-1 and 12-2.  But the bus just says "12" on it.  One goes where you want to go, the other doesn't.  Which is which?  Nobody knows.  And while I've listed some busses like the 2y7 (which means line 2 and/or line 7), there are other busses that'll get you to the same locations and might run more frequently.  Use your favorite transit app or Google Maps to get updated information.
             <br/><hr/>
             <table class="table table-striped">
               <thead>
@@ -171,11 +179,41 @@
       </div>
     </div>
 
+    <!-- modal_2, diplayed when you click "Actualizar" -->
+    <div class="modal modal-lg fade" 
+         data-bs-theme="dark"
+         id="modal_2" 
+         tabindex="-1" 
+         aria-labelledby="exampleModalLabel" 
+         aria-modal="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              Getting Around Asuncion
+            </h5>
+            <button type="button" 
+                    class="btn-close" 
+                    data-bs-dismiss="modal" 
+                    aria-label="Close">
+            </button>
+          </div>
+          <div class="modal-body">
+            <h3>Actualizar Esto</h3>
+            Abra un "Issue" en la pagina de GitHub.  Pero mucho mas facil hablar con el tipo en el Box sin numero en Habitacion 1 de Hostal Patagonia.  Qualquier cosa que quieres hacer por web, hable con el vikingo.  Capaz no sabe como hacerlo, pero el siempre quiere aprender, y queda aburrido.
+          </div>
+          <div class="modal-footer">
+            <button type="button" 
+                    class="btn btn-secondary" 
+                    aria-label="close"
+                    data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="libs/bootstrap/bootstrap.bundle.min.js"></script>
-    <!--  Leaflet 1.9.4
-    <script src="./libs/leaflet/dist/leaflet.js"></script>
-    <script src="./libs/leaflet/dist/leaflet-global.js"></script>
-    -->
     <!--
     <script src="./libs/leaflet-sidebar-v2/js/leaflet-sidebar.js"></script>
       Need leaflet plugins:
@@ -183,14 +221,8 @@
           leaflet-markercluster
           leaflet.Photo (looks hinky... maybe a re-write)
           a better layer control.  Groups? Dropdowns?
-          ... what's that groupedlayercontrol buy us that the regular
-              layer control doesn't?
-    -->oo
-    <script src='./libs/json5/json5.min.js'></script>
-    <script type="module" src="panicle.js"></script>
-    <script src="libs/Leaflet-ExtraMarkers/js/leaflet.extra-markers.js"></script>
-    <!--
-    <script src="libs/Leaflet.OpenMeteo/leaflet.OpenMeteo.js"></script>
     -->
+    <script src="./libs/json5/json5.min.js"></script>
+    <script type="module" src="panicle.js"></script>
   </body>
 </html>
