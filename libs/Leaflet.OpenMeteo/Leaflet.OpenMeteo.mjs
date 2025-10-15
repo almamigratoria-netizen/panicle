@@ -7,7 +7,7 @@
 // Do as much tree shaking as we can...
 import {Control, LatLng} from "/libs/leaflet/dist/leaflet.js";
 
-export default class OpenMeteo extends Control {
+export class OpenMeteo extends Control {
     // With evergreen browsers, we don't need external CSS
     // 
     // Question:  Do multiple instances write multiple CSS sheets?
@@ -249,4 +249,6 @@ export default class OpenMeteo extends Control {
         return this.options.wdirs[d];
     }
 };
+
+export default OpenMeteo;
 

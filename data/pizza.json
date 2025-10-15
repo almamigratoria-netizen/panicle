@@ -3,10 +3,8 @@
 
 {
     defaultMarker: {
-        icon: 'bx-pizza-alt',
-        markerColor: 'red',
-        shape: 'penta',
-        prefix: 'bx,'
+        glyph: 'bx-pizza-alt',
+        color: 'red',
     },
     Zampano: {
         marker: {},
@@ -40,7 +38,7 @@
     },
     "Saturno Pizzas": {
         marker: {},
-	Location: [ -25.288113,-57.638453 ],
+	Location: [-25.287062,-57.642187 ],
 	Link: "https://drive.google.com/drive/folders/1ZRkGWmMxsIJeRk2juw1qgI-zh6pbF6Pthttp://www.pizzahut.com.py/"
     },
     "Pizzotón Centro": {

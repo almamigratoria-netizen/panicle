@@ -2,10 +2,8 @@
 // Burger places in a 15 minute walk from Hostel Patagonia
 {
   defaultMarker: {
-      icon: 'bx-burger-alt',
-      markerColor: 'blue',
-      shape: 'circle',
-      prefix: 'bx,'
+      glyph: 'bx-burger-alt',
+      color: 'blue',
   },
   "Lomitos CLARI": {
     marker: {}, // use the default from this file
@@ -23,7 +21,8 @@
     Link: "https://www.facebook.com/reel/648045833679050"
   },
   "Moon Burger": {
-    Location: [-25.2838625,-57.6354968],
+    marker: {},
+    Location: [-25.283812,-57.632938],
     Link: "https://www.instagram.com/moon.burguer"
   },
   "Smashers Hamburgersr - Sajonia": {

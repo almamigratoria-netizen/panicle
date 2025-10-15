@@ -6,9 +6,9 @@
 
 {
     defaultMarker: {
-        prefix: "bx",
-        icon: "bx-cart",
-	markerColor: "yellow",
+        glyph: "bx-cart",
+	glyphColor: 'black',
+	color: "yellow",
 	shape: 'penta',
     },
     "Parana Home": {
@@ -52,6 +52,11 @@
         Location: [ -25.282063,-57.567563 ],
         Link: "https://delimarket.com.py/",
     },
+    'Autoservicia Rinde Max': {
+	marker: {},
+	Location: [-25.291438,-57.634563 ],
+	Link: "https://www.instagram.com/rindemax/",
+    }, 
 }
 
 // vim: syntax=json5

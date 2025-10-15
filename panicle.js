@@ -18,6 +18,7 @@ import config from "./config.js";
 // Add click handlers to items on the navbar
 import navbar from "./navbar.js";
 import L from "./libs/leaflet/dist/leaflet.js";
+import SVGMarker from "./js/SVGMarker.js";
 
 async function Ajax(method, url) {
     // ROADMAP:  Add a timeout (AbortController)
@@ -52,36 +53,31 @@ async function Load_Data(key, s) {
 
         const defaultMarker = o.defaultMarker || {};
 
-        for (var key in o) {
+        for (const item in o) {
             // This isn't a marker, so move on
-            if (key == "defaultMarker") { continue; };
-
-            let d = o[key];
+            if (item == "defaultMarker") { continue; };
+            let d = o[item];
 
             // the "marker" option
-            let custom_icon = new L.Icon.Default();
-            //if (d.marker) {
-            //    const m = {...defaultMarker, ...d.marker};
-            //    // FIXME: Turns out I don't like ExtraMarkers much.
-            //    // Find a better library
-            //    custom_icon = new L.ExtraMarkers.icon(m);
-            //}
-            let m = new L.Marker(d.Location, {icon: custom_icon});
-
-            // the "url" option
-            let text = key;
-            if (d.Link) {
-                text = "<a target=\"_new\" href=" + d.Link + ">"
-                text = text + key + "</a>"
+            let markerOpts = {};
+            if (d.marker) {
+                markerOpts = { ...defaultMarker, ...d.marker};
             }
-            m.bindPopup(text);
+            let m = new SVGMarker(d.Location, markerOpts);
+
+            // Bind a popup
+            const a = document.createElement('a');
+            a.setAttribute('target', '_new');
+            if (d.Link) { a.setAttribute('href', d.Link); }
+            a.textContent = item;
+            m.bindPopup(a);
 
             // Once we have the marker built, add it to our array
             A.push(m);
         }
         return new L.LayerGroup(A);
     } catch(e) {
-        console.error(`Load_Data: error ${e.message}`);
+        console.error(`Load_Data(${key},${s}): error ${e.message}: stack ${e.stack}`);
     }
 }
 
@@ -157,35 +153,24 @@ async function Load_Map() {
     return map;
 }
 
-
 let map = await Load_Map();
 
-import OpenMeteo from "./libs/Leaflet.OpenMeteo/leaflet.OpenMeteo.mjs";
-new OpenMeteo().addTo(map);
-
-//if (!!config.Weather) {
-//    let OM_url = "./libs/Leaflet.OpenMeteo/leaflet.OpenMeteo.mjs";
-//    let OM = import(OM_url);
-//    OM.then((response) => {
-//        console.log(`import() ok: ${response}`);
-//    })
-//    .catch((error) => {
-//        console.log(`import() failed: ${error}`);
-//    })
-//    // new L.Control.OpenMeteo().addTo(map)//;
-//}
+async function load_weather() {
+    // find a way to not load on mobile
+    if (!!config.Weather && !(navigator.maxTouchPoints > 0)) {
+        let OM_url = "./libs/Leaflet.OpenMeteo/leaflet.OpenMeteo.mjs";
+        let mod = await import(OM_url);
+        new mod.OpenMeteo().addTo(map);
+    }
+}
+load_weather();
 
 
 // For this to work, need to import at least one glyphicon css file
-// FIXME:  We should be riding the wave and use SVG's instead.
-// I think L.ExtraMarkers might not work with Leaflet 2.
-//const testicon = new L.ExtraMarkers.icon({
-//    icon: 'bx-bed-alt',
-//    markerColor: 'blue',
-//    shape: 'square',
-//    prefix: 'bx,'
-//});
-//let marker = new L.Marker([-25.287687,-57.633063], {icon:testicon}).bindPopup("Hostel Patagonia");
-let marker = new L.Marker([-25.287687,-57.633063]).bindPopup("Hostel Patagonia");
+let options = {
+    glyph: 'bx-bed-alt',
+    color: 'darkblue',
+}
+let marker = new SVGMarker([-25.287687,-57.633063], options).bindPopup("Hostel Patagonia");
 marker.addTo(map);
 

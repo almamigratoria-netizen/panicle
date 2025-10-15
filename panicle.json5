@@ -23,11 +23,11 @@
     // These data files get loaded in and parsed to populate the map
     // For details on the options, see ./data/README.md
     Data: {
-      Comida: {
-        Pizza: "data/pizza.json",
-        Burgers: "data/burgers.json",
-        SuperMarkets: "data/supers.json",
-      },
+    //  Comida: {
+    //    Pizza: "data/pizza.json",
+    //    Burgers: "data/burgers.json",
+    //    SuperMarkets: "data/supers.json",
+    //  },
       Pizza: "data/pizza.json",
       Burgers: "data/burgers.json",
       SuperMarkets: "data/supers.json"
