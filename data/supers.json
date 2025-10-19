@@ -57,6 +57,14 @@
 	Location: [-25.291438,-57.634563 ],
 	Link: "https://www.instagram.com/rindemax/",
     }, 
+    'Autoservicio Iturbe': {
+	marker:{},
+	Location: [-25.286312,-57.634047],
+    },
+    'Autoservicio San Miguel': {
+	marker: {},
+	Location: [-25.287363,-57.634734],
+    },
 }
 
 // vim: syntax=json5
