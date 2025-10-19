@@ -3,23 +3,18 @@
 //
 // ESM for Leaflet v2 to create css styled SVG markers.
 //
-// Exports two classes: SVGMarker (the default) and SVGIcon.
-// SVGMarker is really just a convenience that over-rides the icon.  
-// SVGIcon is where the magic happens.
-// LatLng for marker can be a Plus Code (google style Open Location Code)
-// ... has to be a full 10 digit code.
-//
-// This module was created not so much to use SVG icons instead of the
-// default, but so that I could learn a bit about writing modules for 
-// leaflet v2 and a few things about SVG's.
+// default export is the SVGMarker class.  
+// also available are SVGIcon and SVGMarkerUtil
 //
 // I learned that SVG's in <img> tags can't use external <use> or external CSS
-// That's sad.  We'll (eventually) tweaking the Marker class and try not 
-// using <img> tags, but returning <svg> directly.  
-// Not sure if that'll buy us anything, but we'll try.
+// That's sad.   
+// This module was created not so much because I really like SVG's, but
+// more so that I could learn a little bit about how SVG's work and a bit
+// about extending leaflet v2
+//
 
-// tree shaking ?
-import {Marker, Icon, LatLng, Util} from "./leaflet.js";
+// Trust the importmap, I guess
+import {Marker, Icon, LatLng, Util} from 'leaflet';
 
 class SVGMarker extends Marker {
     initialize(latlng, options) {
@@ -30,58 +25,60 @@ class SVGMarker extends Marker {
     }
 }
 
-// Deserialized on module load, so changing this chages the default icon
+//////////////////////////////////////////////////////////////////////
+//
+//                     User Serviceable Parts
+//
+//////////////////////////////////////////////////////////////////////
+//
+// This gets deserialized (turned from text into an SVGSVGElement) on 
+// module load so changing this changes the default icon
 const default_svgText = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 41" class="leaflet-zoom-animated leaflet-interactive leaflet-SVGIcon" style="width:25px">
-  <circle cx="12.5" cy="12.5" r="11.5"/>
-  <path d="M0.1 13 12.5 41 24.9 13"/>
+  <path d="M12.4 0C5.6 0-.02 5.76-.02 12.7-.02 15.12.4501 17.28 1.6 19.2L12.4 38.4 23.2 19.2C24.4 17.38 24.9 15.12 24.88 12.72 24.88 5.8 19.2 0 12.4 0z" />
   <circle class="markerDot" cx="12.5" cy="12.5" r="5"/>
 </svg>
 `;
-let default_SVGIcon = undefined;
-(function() {
-    // tiny polyfill for trustedTypes.  Do we want this?
-    // if (typeof trustedTypes == 'undefined') {
-    //     trustedTypes = {createPolicy:(n, rules) => rules};
-    // }
-    
-    const ourCSS = `
+
+// NOTE:  If you add a new shape, be aware that all the 'shape' option does
+//        is paste this value into the 'd' attribute of the <path> of a copy
+//        of the default icon (defined above).
+const extra_paths = {
+    square: 'M21.44 0H3.66C1.70 0 0.10 1.87 0.10 4.18V24.03 C0.10 26.33 1.70 28.2 3.66 28.2H8.11L12.54 41L17 28.2H21.45C23.41 28.2 25 26.33 25 24.02V4.18C25 1.87 23.41 0 21.45 0Z',
+    penta: 'M0 14.0124 6.2456 0h12.492L24.8 14 12.4912 40.991z',
+};
+
+const ourCSS = `
 .leaflet-SVGIcon {
   fill: #267fca;
   stroke: blue;
   width: 25px;
   height: 41px;
 }
-
 .leaflet-SVGIcon .markerDot {
   fill:white;
-  stroke:blue;
 }
-
-.leaflet-SVGIcon .glyph {
-  position: relative;
-/*  left: 0px; */ 
-  color: white;
+span.SVGIconGlyph {
   width: 25px;
   text-align: center;
   vertical-align: middle;
+  position: relative;
+  display: inline-block;
 }
 `;
-    const _writeCSS = function() {
-        const sheet = new CSSStyleSheet();
-        sheet.replaceSync(ourCSS);
-        document.adoptedStyleSheets.push(sheet);
-    }
+////////////////////////////////////////////////////////////////////
+//
+//                      End user servicable parts
+//
+/////////////////////////////////////////////////////////////////////
+// gets filled in by module init code
+let default_SVGIcon = undefined;
 
-    _writeCSS();    
-    try {
-        default_SVGIcon = SVGIcon.svgDeserialize(default_svgText);
-    } catch (e) {
-        console.warn(e.message);
-    }
-})();
+// gets populated by module init code.  Will include shadows
+// for default icon and all defined extra_paths
+const SVGIconShadows = {};
 
-const defaultOptions = {
+const defaultOptions = {  // same as L.Icon
     iconSize:    [25, 41],
     iconAnchor:  [12, 41],
     popupAnchor: [1, -34],
@@ -89,25 +86,23 @@ const defaultOptions = {
     shadowSize:  [41, 41],
 };
 
-class SVGIcon extends Icon {
-    // Icon has the following methods:
-    // static{} section with setDefaultOptions()
-    // initialize() which calls setOptions
-    // createIcon(oldIcon?: HTMLElement), returns an <img> 
-    // createShadow(oldIcon).  For these two not entirely sure what
-    // "oldIcon" does.
-    //
-    // We'll over-ride createIcon, createShadow and
-    // add...
-    // _createSVGIcon
-    // _svgSerialize
-    // _svgD6eserialize
-    // _svgToDataURL
-
-    static {
+class SVGMarkerUtil {
+    static svgExport(svg=null) {
+        // deserialize if necessary,
+        // wrap in <svg> tag if all they gave us was a <def> or gradient
+        // append to DOM
+        return null;
     }
 
-    // Convert an SVG Element to a string.
+    static svgCreateShadow(shape, icon) {
+        console.log(`Creating shadow for ${shape}`);
+        SVGIconShadows[shape] = undefined;
+        // add attribute 'transform' to icon, rotate(angle, cx, cy)
+        // change colors to dull gray
+        // add blur
+        // probably want some opacity
+    }
+
     static serializeSVG(svgElement) {
         // check if arg === element.  Could also allow selectors.
         const serializer = new XMLSerializer();
@@ -115,73 +110,62 @@ class SVGIcon extends Icon {
         return svgString;
     }
 
-    // Create a dataURL from an SVG for use as img.src
-    // Deprecated: leave it as an aux function.
+    // Create a dataURL from an SVG for use as img.src (not unicode safe!)
     static svgToDataURL(inputSVG) {
         if (inputSVG instanceof SVGSVGElement) {
-            inputSVG = this.serializeSVG(inputSVG);
+            inputSVG = SVGMarkerUtil.serializeSVG(inputSVG);
         }
-        // Not unicode safe.  Do we care?  Are we caring about this?
         const base64 = btoa(inputSVG);
         const s = `data:image/svg+xml;base64,${base64}`;
         return s;
     }
 
-    // There's no standardized feature detection to determine if 
-    // you need TrustedHTML for XSS sinks like DOMParser.
-    static svgDeserialize(svgString, options={}) {
-        const el = document.createElement('p');
-        let needTrustedHTML = false;
-        // You can try poking .innerHTML
+    static svgDeserialize(inputSVG) {
+        // NOTE:  Remove next line for production
+            return SVGMarkerUtil.kludge_svgDeserializer(inputSVG);
         try {
-            el.innerHTML = 'foo';
-        } catch (e) {
-            // if it throws a TypeError, you (probably) need TrustedHTML
-            if (e instanceof TypeError && document.trustedTypes) {
-                needTrustedHTML = true;
+            const Dp = new DOMParser();
+            const svgDoc = Dp.parseFromString(inputSVG, 'image/svg+xml');
+            const errorNode = svgDoc.querySelector("parsererror");
+            if (errorNode) {
+                console.log("DOMParser error:", JSON.stringify(errorNode));
+                return null;
             }
+            return svgDoc.documentElement;
+        } catch(e) {
+            console.warn("svgDeserialize:", e);
+            console.warn("You might need TrustedHTML");
+            console.log(e.message);
+            return SVGMarkerUtil.kludge_svgDeserializer(inputSVG);
         }
-        if (needTrustedHTML == false || 
-            svgString instanceof TrustedHTML) {
-            // Safe to use DOMParser()
-            return SVGIcon.DOM_svgDeserializer(svgString, options);
-        }
-        // Sorta-OK SVG Parser.  Could be easy to break, but handles
-        // what I've thrown at it so far.
-        return this.kludge_svgDeserializer(svgString, options);
-    }
-
-    static DOM_svgDeserializer(svgString, options={}) {
-        // console.info("trust svgString? ", svgString instanceof TrustedHTML);
-        const Dp = new DOMParser();
-        const svgDoc = Dp.parseFromString(svgString, 'image/svg+xml');
-        if (svgDoc.querySelector("parsererror")) {
-            return null;
-        }
-        return svgDoc.documentElement;
-    }
-
-    static svgMaker(tag, attrs) {
-        if (tag.startsWith("/")) { return null; }
-        const svgNS = "http://www.w3.org/2000/svg";
-        const el = document.createElementNS(svgNS, tag);
-        for (const key in attrs) {
-            el.setAttributeNS(svgNS, key, attrs[key]);
-        }
-        return el;
     }
 
     // This is a kludge.  You really can't parse XML with regex.
     // But it was fun to build.
     static kludge_svgDeserializer(svgString, options={}) {
+        // Regex unescaper
+        function unescapeRegexString(escapedString) {
+          // Unescape common regex special characters
+          let u = escapedString.replace(/\\([.*+?()[\]{}|^$])/g, '$1');
+          // Unescape forward slashes
+          u = u.replace(/\\\//g, '/');
+          // Unescape escaped backslashes (\\ becomes \)
+          u = u.replace(/\\\\/g, '\\');
+          // Unescape hex encoding
+          u = u.replace(/\\x([0-9A-Fa-f]{2})/g, function(match, hex) {
+              return String.fromCharCode(parseInt(hex, 16));
+          });
+          return u;
+        }
+
         // Use a stack instead of recursion.  Might refactor it later. 
+        //
         let tagStack = []; 
         // /<(\w+)([^>]*)>.*?</\1>/   (Doesn't match self-closers)
         const re_tag = /<\s*(?<tagclose>[\/])?\s*(?<tag>\/?\w+)\s*(?<attribs>[^>]*)?>/g;
-        // ideally re_tag would incorporate the attributes RE, group
-        // it as ?<attribs>, and match 0 or more instances.
-        const re_attrib = /((?<key>\w+)\s*=\s*(?<value>['"][^'"]*?['"]))/g;
+
         // ideally our re_tag would detect self-closers as well.
+        const re_attrib = /((?<key>\w+)\s*=\s*(?<value>(['"])[^'"]*?\4))/g;
         const re_selfClose = /\/\s*>/;
         let match = svgString.matchAll(re_tag);
         const allMatches = Array.from(match);
@@ -196,12 +180,12 @@ class SVGIcon extends Icon {
                     attrs[key.replace('"', '')] = value.slice(1,-1);
                 }
             }
-            let el = SVGIcon.svgMaker(tag, attrs);
+            let el = SVGMarkerUtil.svgMaker(tag, attrs);
             if (match[0].match(re_selfClose) || tagclose) {
                 // tag closed.  Append to parent.
-                if (tagStack.length > 1) {
+                tagStack.at(-1).appendChild(el);
+                if (tagStack.length > 1) {  // dont pop the bottom tag
                     tagStack.pop();
-                    tagStack.at(-1).appendChild(el);
                 }
             } else {
                 // tag not closed, so next element is a child
@@ -211,87 +195,152 @@ class SVGIcon extends Icon {
         return tagStack.pop();
     }
 
-    // Available options are:
-    // border: stroke color
-    //
-    // ROADMAP: shape: <nyi, but shortcut for one of our svg's>
-    // ROADMAP: svg: <string> or element (could just be a "use")
+    // Creates and returns a tag in the SVG namespace with
+    // attributes set according to the passed object
+    static svgMaker(tag, attrs) {
+        if (tag.startsWith("/")) { return null; }
+        const svgNS = "http://www.w3.org/2000/svg";
+        const el = document.createElementNS(svgNS, tag);
+        for (const key in attrs) {
+            el.setAttribute(key, attrs[key]);
+        }
+        return el;
+    }
+    // Do we need an svgExport function?  To wrap <def>'s
+    // and append them to the DOM?
+}
+
+
+class SVGIcon extends Icon {
+
+    // Build the icon from (mostly) scratch.  May need to rework it a tad
+    // if we start adding shaped icons like ExtraMarkers had.
     _createSVGIcon(options) {
-        let icon = default_SVGIcon.cloneNode(true);  // unless svg? or shape?
-        let dwifs = false;
+        let icon = default_SVGIcon.cloneNode(true);
+        let ignore_these_keys = [
+            // Our own options 
+            'glyphColor', 'glyphPrefix', 'imageOpts',
+            // L.Marker options we can ignore (Marker will handle them)
+            'keyboard', 'title', 'alt', 'zIndexOffset', 'opacity', 
+            'raisoOnHover', 'pane', 'shadowPane', 'bubblingPointerEvents',
+            'autoPanOnFocus'
+        ];
         for (const [key, value] of Object.entries(options)) {
             // These keys handled by another key's handler
-            if (['glyphColor'].includes(key)) { continue; }
-            if (key == 'dwifs') {
-                dwifs = value;
-                if (dwifs) {
-                    console.warn("dwifs = ${value}");
-                    console.warn(".... This voids the warranty!");
+            if (ignore_these_keys.includes(key)) { continue; }
+            if (key == 'shape') {
+                if (value in extra_paths) {
+                    let p = icon.querySelector('path');
+                    p.setAttribute('d', extra_paths[value]);
+                } else {
+                    console.warn(`unknown shape: ${value}`);
                 }
             } else if (key == 'color') { 
-                // can I setAttributeNS on the icon itself?
-                if (CSS.supports('color', value)) {   // what if it's a url?
-                    icon.querySelector('circle').setAttribute('fill', value);
-                    icon.querySelector('path').setAttribute('fill', value);
+                if (CSS.supports('color', value)) {
+                    for (const child of icon.children) {
+                        // Specific CSS can still over-ride these
+                        child.setAttribute('fill', value);
+                        child.setAttribute('stroke', value);
+                    }
                 } else { console.warn(`color ${value} not supported`); }
             } else if (key == "class") {
-                icon.classList.add(value);
-            } else if (key == 'dotColor') { 
-                let el = icon.querySelector('.markerDot');
-                if (CSS.supports('color', value)) {   // what if it's a url?
-                    el?.setAttribute('style', `fill:${value};`);
-                } else { console.warn(`color ${value} not supported`); }
-            } else if (key == 'glyph') {
-                // ROADMAP:  They may have passed us an SVG, not a name
-                let glyphPrefix = options.glyphPrefix || value.split('-')[0];
-                let i = document.createElement('i');
-                i.className = `${glyphPrefix} ${value} glyph`;
-                i.style.color = options.glyphColor || 'white';
-
-                let foreign = SVGIcon.svgMaker('foreignObject', {x:0,y:0});
-                foreign.style.height = `${this.options.iconSize[1]}px`;
-                foreign.style.width = `${this.options.iconSize[0]}px`;
-                foreign.appendChild(i);
-                icon.appendChild(foreign);
-                // remove the white dot when we use an icon
-                icon.querySelector('.markerDot').remove();
-            } else if (key == 'style') {  // Style sheet, not attribute
-                // Preferred method is to provide a <style> object
-                if (value.tagName?.toLowerCase() == 'style') {
-                    icon.prepend(value);
-                } else if (typeof value === 'string') {
-                    const style = SVGIcon.svgMaker('style');
-                    style.append(value);
-                    icon.prepend(style);
-                } else {
-                    console.warn("style attribute cannot be %o", value);
+                for (let c of value.split(/\s+/)) { icon.classList.add(c); }
+            } else if (key == "fill") {
+                if (CSS.supports('color', value)) {
+                    icon.querySelector('path').style.fill = value;
                 }
-            } else if (key == 'border') {
+            } else if (key == "stroke") {
                 for (const child of icon.children) {
-                    child.style.stroke = value;
+                    child.setAttribute('stroke', value);
                 }
-            } else if (key == 'shape') {
-                console.info("shape attribute not yet supported");
+            } else if (key == 'dotColor') { 
+                if (CSS.supports('color', value)) {
+                    let el = icon.querySelector('.markerDot');
+                    if (el) el.style.fill = value;
+                } else { console.warn(`color ${value} not supported`); }
+            } else if (key == 'dotRadius') { 
+                icon.querySelector('.markerDot')?.setAttribute('r', value);
+            } else if (key == 'image') {
+                let v = value;
+                // did they give us an svg string?
+                if (typeof v === 'string' && v.trim().match(/^<svg.*>/)) {
+                    v = SVGMarkerUtil.svgToDataURL(v);
+                }
+                if (v.match(/^[\.\/]/)) { // they gave us a relative URL
+                    let a = document.createElement('a');
+                    a.setAttribute('href', v);
+                    v = a.href;  // Magic incantation to get canonical URL
+                }
+                // at this point we should have either a dataURL or canonical
+                // This is in case none of the above tests matched anything
+                if (!URL.canParse(v)) { 
+                    console.warn("Bad image option %o", value);
+                    continue;
+                }
+                let imgOpts = options['imageOpts'] || {};
+                imgOpts.href = v;
+                if (!imgOpts.width) {imgOpts.width = 15}
+                if (!imgOpts.height) {imgOpts.height = 15}
+                if (imgOpts.width && !imgOpts.x) {
+                    imgOpts.x = (25 - imgOpts.width)/2;
+                }
+                if (imgOpts.height && !imgOpts.y) {
+                    imgOpts.y = (25 - imgOpts.height)/2;
+                }
+                let el = SVGMarkerUtil.svgMaker('image', imgOpts);
+                // ROADMAP: Could probably do an Image(), set href, then 
+                // try to get native size in an onload handler
+
+                icon.appendChild(el);
+                el = icon.querySelector('.markerDot');
+                if (el) el.setAttribute('r', 0);
+            } else if (key == 'glyph' || key == 'number') {
+                let i = document.createElement('span');
+                // basic build
+                if (key == 'glyph') {
+                    const pre = options.glyphPrefix || value.split('-')[0];
+                    i.className = `${pre} ${value}`;
+                } else {
+                    i.textContent = value;
+                }
+                i.classList.add('SVGIconGlyph');
+                // handle glyphColor
+                const color = options.glyphColor || 'white';
+                if (!CSS.supports('color', color)) {
+                    console.warn(`Bad glyphColor ${options.glyphCOlor}`);
+                    i.style.color = 'white';
+                } else {
+                    i.style.color = color;
+                }
+                // embed it in the SVG
+                let forx = SVGMarkerUtil.svgMaker('foreignObject', {x:0,y:0});
+                forx.style.height = `${this.options.iconSize[1]}px`;
+                forx.style.width = `${this.options.iconSize[0]}px`;
+                forx.appendChild(i);
+                icon.appendChild(forx);
+                // "remove" the white dot when we use an icon
+                icon.querySelector('.markerDot')?.setAttribute('r', 0);
+            } else if (key == 'style') {
+                const style = SVGMarkerUtil.svgMaker('style');
+                style.append(value);
+                icon.prepend(style);
             } else {
-                if (dwifs) {  // dangerous, but can be really useful
-                    for (const child of icon.children) {
-                        child.style[key] = value;
-                    }
+                for (const child of icon.children) {
+                    child.style[key] = value;
                 }
-                console.log(`${key}: ${value}`);
             }
         }
 
-        // Validate color:
-        //     CSS.supports('color', '#007')
         return icon;
     }
 
+    // over-rides L.Icon.createIcon();
     createIcon() {
         const options = this._options || {};
         let icon;
         if (!Object.keys(options).length) { 
-            icon = default_SVGIcon.cloneNode(true);  // No options.  Default.
+            // No options provided, so use default icon
+            icon = default_SVGIcon.cloneNode(true); 
         } else {
             icon = this._createSVGIcon(options);
         }
@@ -301,18 +350,15 @@ class SVGIcon extends Icon {
         return icon;
     }
 
-    // Marker has a .createShadow() function.  Maybe over-ride it?
-    // The idea is take the icon, make all fill/stoke some graying color,
-    // rotate it about the point, blur it.
-    createSVGShadow(options) {
-        const j = JSON.stringify(options);
-        console.log(`createShadow(${j})`);
-        // console.log("Call Stack: ", new Error().stack);
+
+    createShadow(args) {
+        const shape = this.options['shape'] || 'default';
+        return SVGIconShadows[shape]; 
     }
 
     initialize(options) {
         if (!default_SVGIcon) {
-            default_SVGIcon = SVGIcon.svgDeserialize(default_svgText);
+            default_SVGIcon = SVGMarkerUtil.svgDeserialize(default_svgText);
         }
         this.name = SVGIcon;
         this._options = options;
@@ -320,76 +366,28 @@ class SVGIcon extends Icon {
     }
 }
 
-default_SVGIcon = SVGIcon.svgDeserialize(default_svgText);
-export {SVGMarker as default, SVGIcon};
 
-//class Icon extends Class {
-//	static {
-//		this.setDefaultOptions({
-//			popupAnchor: [0, 0],
-//			tooltipAnchor: [0, 0],
-//			crossOrigin: false
-//		});
-//	}
+export {SVGMarker as default, SVGIcon, SVGMarkerUtil};
 
-//	initialize(options) {
-//		setOptions(this, options);
-//	}
+// Run on module load, not instance instantiation
+(function() {
+    const _writeCSS = function() {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(ourCSS);
+        document.adoptedStyleSheets.push(sheet);
+    }
 
-	// @method createIcon(oldIcon?: HTMLElement): HTMLElement
-	// Called internally when the icon has to be shown, returns a `<img>`
-    // ***********  Actually called by Marker ****************************
-//	createIcon(oldIcon) {
-//		return this._createIcon('icon', oldIcon);
-//	}
+    const _create_shadows = function() {
+        const icon = default_SVGIcon.cloneNode(true);
+        SVGMarkerUtil.svgCreateShadow('default', icon);
+        for (const [shape, path] of Object.entries(extra_paths)) {
+            icon.querySelector('path').setAttribute('d', path);
+            SVGMarkerUtil.svgCreateShadow(shape, icon);
+        }
+    }
 
-//	createShadow(oldIcon) {
-//		return this._createIcon('shadow', oldIcon);
-//	}
-
-//	_createIcon(name, oldIcon) {
-//		const src = this._getIconUrl(name);
-//		if (!src) {
-//			if (name === 'icon') { throw new Error('iconUrl not set'); }
-//			return null;
-//		}
-//		const img = this._createImg(src, oldIcon && oldIcon.tagName === 'IMG' ? oldIcon : null);
-//		this._setIconStyles(img, name);
-//		if (this.options.crossOrigin || this.options.crossOrigin === '') {
-//			img.crossOrigin = this.options.crossOrigin === true ? '' : this.options.crossOrigin;
-//		}
-//		return img;
-//	}
-
-//	_setIconStyles(img, name) {
-//		const options = this.options;
-//		let sizeOption = options[`${name}Size`];
-//		if (typeof sizeOption === 'number') {
-//			sizeOption = [sizeOption, sizeOption];
-//		}
-//		const size = Point.validate(sizeOption) && new Point(sizeOption);
-//		const anchorPosition = name === 'shadow' && options.shadowAnchor || options.iconAnchor || size && size.divideBy(2, true);
-//		const anchor = Point.validate(anchorPosition) && new Point(anchorPosition);
-//		img.className = `leaflet-marker-${name} ${options.className || ''}`;
-//		if (anchor) {
-//			img.style.marginLeft = `${-anchor.x}px`;
-//			img.style.marginTop  = `${-anchor.y}px`;
-//		}
-//		if (size) {
-//			img.style.width  = `${size.x}px`;
-//			img.style.height = `${size.y}px`;
-//		}
-//	}
-
-//	_createImg(src, el) {
-//		el ??= document.createElement('img');
-//		el.src = src;
-//		return el;
-//	}
-
-//	_getIconUrl(name) {
-//		return Browser.retina && this.options[`${name}RetinaUrl`] || this.options[`${name}Url`];
-//	}
-//}
-
+    _writeCSS();    
+    default_SVGIcon = SVGMarkerUtil.svgDeserialize(default_svgText);
+    _create_shadows();
+})();
 
