@@ -158,7 +158,7 @@ let map = await Load_Map();
 async function load_weather() {
     // find a way to not load on mobile
     if (!!config.Weather && !(navigator.maxTouchPoints > 0)) {
-        let OM_url = "./libs/Leaflet.OpenMeteo/leaflet.OpenMeteo.mjs";
+        let OM_url = "./js/leaflet.OpenMeteo.mjs";
         let mod = await import(OM_url);
         new mod.OpenMeteo().addTo(map);
     }
