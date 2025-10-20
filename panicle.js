@@ -121,8 +121,8 @@ async function Load_Map() {
     const OSM = new L.TileLayer(OSMUrl, {detectRetina: true});
     OSM.addTo(map);
 
-    // Create a layerGroup object (lgo) that has key:value pairs contaiing
-    // the name of the layer and the layer itself
+    // Create a layerGroup object (lgo) that has key:value pairs 
+    // containing the name of the layer and the layer itself
     let lgo = {};    // layer group object
     if (config.Data) {
         for (var key in config.Data) {

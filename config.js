@@ -44,7 +44,12 @@ try {
 } 
 
 function addLinks(links) {
-    // FIXME:  if empty object or undefined, hide "Links"
+    // if empty object or undefined, hide "Links"
+    if (!links || Object.keys(links).length == 0) {
+        let el = document.getElementById('links_dropdown').parent;
+        el.remove();
+        return;
+    }
     for (var key in links) {
         let link = links[key];
         let aLli = document.createElement('li');
