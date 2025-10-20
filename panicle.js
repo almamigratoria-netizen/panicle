@@ -160,7 +160,7 @@ async function load_weather() {
     if (!!config.Weather && !(navigator.maxTouchPoints > 0)) {
         let OM_url = "./js/Leaflet.OpenMeteo.mjs";
         let mod = await import(OM_url);
-        new mod.OpenMeteo().addTo(map);
+        new mod.OpenMeteo({autoTitle: true}).addTo(map);
     }
 }
 load_weather();

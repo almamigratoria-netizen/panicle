@@ -1,19 +1,198 @@
 //
-//    Leaflet.OpenMeteo.mjs
-//
+//    Leaflet.Open-Meteo.mjs
 //
 import {Control, LatLng} from 'leaflet';
 
 export class OpenMeteo extends Control {
+    // FIXME:  Need an initialize
+    // FIXME:  Move CSS stuffing to IFFE outside the class
+    //
     // With evergreen browsers, we don't need external CSS
     // 
+    // Question:  Do multiple instances write multiple CSS sheets?
+    //            should only need one.
 
     static {
         // Not sure what should go here
     }
 
-    _writeCSS() {
-        const our_CSS = `
+    _control_template() {
+        // Easier to define the function ourselves than to import from leaflet
+        function create(tag, className='', mama=undefined) {
+            const el = document.createElement(tag);
+            el.className = className;
+            mama?.appendChild(el);
+            return el;
+        };
+
+        // This would be easier if I let myself use .innerHTML, but....
+        const cdiv = create('div', 'leaflet-control-openmeteo');
+        const titlediv = create('h4', '', cdiv);
+        this._titlediv = titlediv;
+        titlediv.textContent = this.options.title;
+        const idiv = create('div', '', cdiv);
+        const img = create('img', 'weatherIcon', idiv);
+        this._img = img;
+        const tdiv = create('div', '', cdiv);
+        let s1 = create('span', '', tdiv);
+        s1.textContent = "T: ";
+        let s2 = create('span', '', tdiv);
+        s2.textContent = "{temp}";
+        this._tspan = s2;
+        const hdiv = create('div', '', cdiv);
+        s1 = create('span', '', hdiv);
+        s1.textContent = "H: ";
+        s2 = create('span', '', hdiv);
+        s2.textContent = "{RH}";
+        this._hspan = s2;
+        const wdiv = create('div', '', cdiv);
+        s1 = create('span', '', wdiv);
+        s1.textContent = "{wind}";
+        this._wspan = s1;
+
+        return cdiv;
+    };
+
+    default_options = {
+        position: "bottomleft",
+        title: "Open-Meteo",
+    };
+
+    _tweakConfig() {
+        if (this.options.center) {
+            let p = this.options.center;
+            this.options.center = new L.LatLng(p[0], [1]);
+        }
+        if (this.options.wind_directions) {
+            if (this.options.wind_directions.toLowerCase() == "default") {
+                this.options.wdirs = [ 
+                    "N", "NE", "E", "SE", "S", "SW", "W", "NW" 
+                ];
+            } else {
+                this.options.wdirs = this.option.wind_drections; 
+            }
+        }
+    };
+
+    onAdd(map) {
+        // do I need "this"?
+        this._tweakConfig();
+        this._div = this._control_template();
+        map.on("moveend", this.refresh, this);  
+        // Wall/MagicMirror displays might never get panned, so...
+        window.setInterval(this.refresh.bind(this), 3600000);
+        this.refresh(); // Initialize the data
+        return this._div;
+    };
+
+    async refresh(ev) {
+        function addUnits(weather_item) {
+            let s = current[weather_item] + units[weather_item];
+            return s;
+        }
+        let center = this.options.center || this._map.getCenter();
+        let url = "https://api.open-meteo.com/v1/forecast?latitude=";
+        url = url + center.lat + "&longitude=" + center.lng;
+        url = url + "&current=temperature_2m,relative_humidity_2m,"
+        url = url + "wind_speed_10m,wind_direction_10m,precipitation,"
+        url = url + "rain,showers,weather_code,cloud_cover,uv_index";
+        // FIXME: Figure out how to debounce this.  15 seconds?
+        let reply;
+        try {
+            const response = await fetch(url);
+            reply = await(response.json());
+        } catch (e) {
+            console.error(`Leaflet.OpenMeteo: ${e.name} ${e.message}`);
+            return;
+        }
+        const current = reply.current;
+        const units = reply.current_units;
+        this._tspan.textContent = addUnits("temperature_2m");
+        this._hspan.textContent = addUnits("relative_humidity_2m");;
+        let wdir;
+        if (this.options.wdirs) {
+            wdir = this.mapWindDirection(current.wind_direction_10m);
+        } else {
+            wdir = current.wind_direction_10m;
+        }
+        let wind = wdir + "@" + addUnits("wind_speed_10m");
+        this._wspan.textContent = wind;
+        const imgClass = "om-" + current.weather_code;
+        const cl = this._img.classList;
+        for (const c in cl) {
+            if (c.startsWith("om-")) {
+                this._img.classList.remove(c);
+            }
+        }
+        this._img.classList.add(imgClass);
+        if (this.options.autoTitle) {
+            const NOSM='https://nominatim.openstreetmap.org/reverse'
+            const center = this._map.getCenter();
+            let url = `${NOSM}?lat=${center.lat}&lon=${center.lng}`;
+            url = url + '&zoom=10&format=jsonv2';
+
+            async function updateTitle(tdiv) {
+                try {
+                    const r = await fetch(url);
+                    const j = await r.json();
+                    let c = j.address.city || j.address.municipality;
+                    c = c || j.address.state || j.address.country;
+                    c = c || 'Open-Meteo';
+                    tdiv.textContent = c;
+                } catch (e) {
+                    console.warn(`${e.name}: ${e.message}(${url})`);
+                }
+            }
+            updateTitle(this._titlediv);
+        }
+
+
+        // To access __all__ styleSheets, you have to look at
+        // document.styleSheets, document.adoptedStyleSheets, and
+        // shadowRoot.adoptedStyleSheets.  I think.
+        function verifyStyle(selector) {
+            let haveRule = false;
+            const pattern = selector + "\\s*,?";
+            const re = new RegExp(pattern);
+            if (typeof document.adoptedStyleSheets !== "undefined") {
+                const cssSheets = document.adoptedStyleSheets;
+                outerloop: for (let i = 0; i < cssSheets.length; i++) {
+                    const rules = cssSheets[i].cssRules || cssSheets[i].rules;
+                    for (let j = 0; j < rules.length; j++) {
+                        let rtt = rules[j].selectorText;
+                        const match = re.exec(rtt);
+                        if (match) {
+                            haveRule = true;
+                            break outerloop;
+                        }
+                    }
+                }
+            }
+            return haveRule;
+        }
+
+        const classExists = verifyStyle(imgClass);
+        if (!classExists) {
+            const msg = `No icon for ${imgClass} (${current.weather_code})`;
+            console.warn(msg);
+            alert(msg);
+        }
+    };
+
+    mapWindDirection(degrees) {
+        // Map wind direction to things like "E" and "SW"
+        const tlen = this.options.wdirs.length;
+        const divisor = 360 / (tlen);
+        degrees = (degrees + (divisor/2)) % 360
+        let d = Math.round(degrees/divisor) % (tlen);
+        return this.options.wdirs[d];
+    }
+};
+
+export default OpenMeteo;
+
+(function() {
+const our_CSS = `
 .leaflet-control-openmeteo {
   color:#eee;
   background:#555;
@@ -23,6 +202,7 @@ export class OpenMeteo extends Control {
 }
 .leaflet-control-openmeteo .weatherIcon {
   float:left;
+  border:1px solid #555;
   width:50px;
   height:50px;
   margin-right:10px;
@@ -81,168 +261,12 @@ export class OpenMeteo extends Control {
   background-image: url('data:image/svg+xml,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 16 16"%3E%3Cpath d%3D"M2.658 11.026a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m-7.5 1.5a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m9.5 0a.5.5 0 0 1 .316.632l-.5 1.5a.5.5 0 1 1-.948-.316l.5-1.5a.5.5 0 0 1 .632-.316m-.753-8.499a5.001 5.001 0 0 0-9.499-1.004A3.5 3.5 0 1 0 3.5 10H13a3 3 0 0 0 .405-5.973M8.5 1a4 4 0 0 1 3.976 3.555.5.5 0 0 0 .5.445H13a2 2 0 0 1 0 4H3.5a2.5 2.5 0 1 1 .605-4.926.5.5 0 0 0 .596-.329A4 4 0 0 1 8.5 1M7.053 11.276A.5.5 0 0 1 7.5 11h1a.5.5 0 0 1 .474.658l-.28.842H9.5a.5.5 0 0 1 .39.812l-2 2.5a.5.5 0 0 1-.875-.433L7.36 14H6.5a.5.5 0 0 1-.447-.724z"%2F%3E%3C%2Fsvg%3E');
 }
 `;
-        try {   // should work on all evergreen browsers
-            const sheet = new CSSStyleSheet();
-            sheet.replaceSync(our_CSS);
-            document.adoptedStyleSheets.push(sheet);
-        } catch (e) {
-            // The rest, well... 
-            console.warn("You should replace your broken browser", e.message);
-        }
-    };
-
-
-    _control_template() {
-        // Easier to define the function ourselves than to import from leaflet
-        function create(tag, className='', mama=undefined) {
-            const el = document.createElement(tag);
-            el.className = className;
-            mama?.appendChild(el);
-            return el;
-        };
-
-        // This would be easier if I let myself use .innerHTML, but....
-        const cdiv = create('div', 'leaflet-control-openmeteo');
-        const titlediv = create('h4', '', cdiv);
-        titlediv.textContent = this.options.title;
-        const idiv = create('div', '', cdiv);
-        this._img = create('img', 'weatherIcon', idiv);
-        const tdiv = create('div', '', cdiv);
-        let s1 = create('span', '', tdiv);
-        s1.textContent = "T: ";
-        let s2 = create('span', '', tdiv);
-        s2.textContent = "{temp}";
-        this._tspan = s2;
-        const hdiv = create('div', '', cdiv);
-        s1 = create('span', '', hdiv);
-        s1.textContent = "H: ";
-        s2 = create('span', '', hdiv);
-        s2.textContent = "{RH}";
-        this._hspan = s2;
-        const wdiv = create('div', '', cdiv);
-        s1 = create('span', '', wdiv);
-        s1.textContent = "{wind}";
-        this._wspan = s1;
-
-        return cdiv;
-    };
-
-    options = {
-        position: "bottomleft",
-        title: "Open-Meteo",
-    };
-
-    _tweakConfig() {
-        if (this.options.center) {
-            let p = this.options.center;
-            this.options.center = new L.LatLng(p[0], [1]);
-        }
-        if (this.options.wind_directions) {
-            if (this.options.wind_directions.toLowerCase() == "default") {
-                this.options.wdirs = [ 
-                    "N", "NE", "E", "SE", "S", "SW", "W", "NW" 
-                ];
-            } else {
-                this.options.wdirs = this.option.wind_drections; 
-            }
-        }
-    };
-
-    onAdd(map) {
-        this._tweakConfig();
-        this._writeCSS();
-        this._div = this._control_template();
-        map.on("moveend", this.refresh, this);  
-        // Wall/MagicMirror displays might never get panned, so...
-        window.setInterval(this.refresh.bind(this), 3600000);
-        this.refresh(); // Initialize the data
-        return this._div;
-    };
-
-    async refresh(ev) {
-        function addUnits(weather_item) {
-            let s = current[weather_item] + units[weather_item];
-            return s;
-        }
-        let center = this.options.center || this._map.getCenter();
-        let url = "https://api.open-meteo.com/v1/forecast?latitude=";
-        url = url + center.lat + "&longitude=" + center.lng;
-        url = url + "&current=temperature_2m,relative_humidity_2m,"
-        url = url + "wind_speed_10m,wind_direction_10m,precipitation,"
-        url = url + "rain,showers,weather_code,cloud_cover,uv_index";
-        // FIXME: Figure out how to debounce this.  15 seconds?
-        let reply;
-        try {
-            const response = await fetch(url);
-            reply = await(response.json());
-        } catch (e) {
-            console.error(`Leaflet.OpenMeteo: ${e.message}`);
-            return;
-        }
-        const current = reply.current;
-        const units = reply.current_units;
-        this._tspan.textContent = addUnits("temperature_2m");
-        this._hspan.textContent = addUnits("relative_humidity_2m");;
-        let wdir;
-        if (this.options.wdirs) {
-            wdir = this.mapWindDirection(current.wind_direction_10m);
-        } else {
-            wdir = current.wind_direction_10m;
-        }
-        let wind = wdir + "@" + addUnits("wind_speed_10m");
-        this._wspan.textContent = wind;
-        const imgClass = "om-" + current.weather_code;
-        const cl = this._img.classList;
-        for (const c in cl) {
-            if (c.startsWith("om-")) {
-                this._img.classList.remove(c);
-            }
-        }
-        this._img.classList.add(imgClass);
-
-        // To access __all__ styleSheets, you have to look at
-        // document.styleSheets, document.adoptedStyleSheets, and
-        // shadowRoot.adoptedStyleSheets.  I think.
-        function verifyStyle(selector) {
-            let haveRule = false;
-            // so when we have om-47 we don't match om-4
-            const pattern = `(${selector}$)|(${selector},)`;
-            const re = new RegExp(pattern);
-            if (typeof document.adoptedStyleSheets !== "undefined") {
-                const cssSheets = document.adoptedStyleSheets;
-                outerloop: for (let i = 0; i < cssSheets.length; i++) {
-                    const rules = cssSheets[i].cssRules || cssSheets[i].rules;
-                    for (let j = 0; j < rules.length; j++) {
-                        let rtt = rules[j].selectorText;
-                        const match = re.exec(rtt);
-                        if (match) {
-                            console.debug(`${rtt} matches ${re.toString()}`);
-                            haveRule = true;
-                            break outerloop;
-                        }
-                    }
-                }
-            }
-            return haveRule;
-        }
-
-        const classExists = verifyStyle(imgClass);
-        if (!classExists) {
-            const msg = `No icon for ${imgClass} (${current.weather_code})`;
-            console.error(msg);
-            alert(msg);
-        }
-    };
-
-    mapWindDirection(degrees) {
-        // Map wind direction to things like "E" and "SW"
-        const tlen = this.options.wdirs.length;
-        const divisor = 360 / (tlen);
-        degrees = (degrees + (divisor/2)) % 360
-        let d = Math.round(degrees/divisor) % (tlen);
-        return this.options.wdirs[d];
-    }
-};
-
-export default OpenMeteo;
-
+try {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(our_CSS);
+    document.adoptedStyleSheets.push(sheet);
+} catch (e) {
+    // The rest, well... 
+    console.warn("You should replace your broken browser", e.message);
+}
+})();
