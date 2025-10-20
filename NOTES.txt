@@ -60,9 +60,6 @@ const search = (event, objectData = [], setReturnedData, combinations = []) => {
 export default search;
 =========================================
 
-================================================
-https://github.com/oskosk/Leaflet.Weather\
-Use as basis for JQuery-free free weather API widget
 ===================================================
 Add StrapDown to local nginx config. Don't have
 markdown add-on in my phone's browser.
