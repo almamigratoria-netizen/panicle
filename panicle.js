@@ -150,8 +150,8 @@ async function Load_Map() {
             collapsed: !!(navigator.maxTouchPoints > 0),
             hideSingleBase: true,
         };
-        const layerControl = new L.Control.Layers(null, lgo, opts);
-        layerControl.addTo(map);
+        const layersControl = new Control.Layers(null, lgo, opts);
+        layersControl.addTo(map);
     }
     return map;
 }
