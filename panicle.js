@@ -28,16 +28,16 @@ async function Ajax(method, url) {
         for (let [key, value] of response.headers) {
             headers[key] = value;
         }
-        console.log(response.headers.get('Content-Type'));
         j = await response.text();
-        if (response.headers.get('Content-Type') == 'application/json') {
+        const ContentType = response.headers.get('Content-Type');
+        if (ContentType == 'application/json') {
             j = JSON5.parse(j);
         } 
+        return j;
     } catch(e) {
         console.error(`fetch ${url}: ${e.name}:${e.message}`);
         return null;
     }
-    return j;
 }
 
 // Load data from JSON[5] files specified in the config file
@@ -47,7 +47,12 @@ async function Load_Data(key, s) {
     //         ... and of course add a grouped layer ctrl
     try {
         let o = await Ajax('GET', s);
-        let A = [];
+        let CategoryArray = []
+        if (o.Category) {
+        }
+
+
+        let markerArray = [];
 
         const defaultMarker = o.defaultMarker || {};
 
@@ -71,9 +76,9 @@ async function Load_Data(key, s) {
             m.bindPopup(a);
 
             // Once we have the marker built, add it to our array
-            A.push(m);
+            markerArray.push(m);
         }
-        return new LayerGroup(A);
+        return new LayerGroup(markerArray);
     } catch(e) {
         console.error(`Load_Data(${key},${s}): error ${e.message}: stack ${e.stack}`);
     }
