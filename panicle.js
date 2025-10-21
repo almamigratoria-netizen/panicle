@@ -15,31 +15,27 @@
 // Get and parse the config file
 // import JSON5 from "./libs/json5/json5.min.js";
 import config from "./config.js";
-// Add click handlers to items on the navbar
+import {Map, TileLayer, LayerGroup, Control} from 'leaflet';
 import navbar from "./navbar.js";
-import L from "./libs/leaflet/dist/leaflet.js";
 import SVGMarker from "./js/SVGMarker.js";
 
 async function Ajax(method, url) {
     // ROADMAP:  Add a timeout (AbortController)
-    let response;
+    let response, j;
     try {
+        const headers = {}
         response = await fetch(url);
+        for (let [key, value] of response.headers) {
+            headers[key] = value;
+        }
+        console.log(response.headers.get('Content-Type'));
+        j = await response.text();
+        if (response.headers.get('Content-Type') == 'application/json') {
+            j = JSON5.parse(j);
+        } 
     } catch(e) {
-        console.error(`fetch ${url}: ${e.message}`);
+        console.error(`fetch ${url}: ${e.name}:${e.message}`);
         return null;
-    }
-    if (!response.ok) {
-        console.error(`fetch ${url}: ${response.statusText}`);
-        return null;
-    }
-    let j = await response.text();
-    // Try to parse as JSON, return text on exception
-    try {
-        const j5 = JSON5.parse(j);
-        j = j5;
-    } catch (error) {
-        console.warn(error.message);
     }
     return j;
 }
@@ -47,6 +43,8 @@ async function Ajax(method, url) {
 // Load data from JSON[5] files specified in the config file
 async function Load_Data(key, s) {
     // FIXME:  Figure out how to convert Open Location codes
+    // FIXME:  If key exists Category, wrap so we get groups on layer ctrl
+    //         ... and of course add a grouped layer ctrl
     try {
         let o = await Ajax('GET', s);
         let A = [];
@@ -75,7 +73,7 @@ async function Load_Data(key, s) {
             // Once we have the marker built, add it to our array
             A.push(m);
         }
-        return new L.LayerGroup(A);
+        return new LayerGroup(A);
     } catch(e) {
         console.error(`Load_Data(${key},${s}): error ${e.message}: stack ${e.stack}`);
     }
