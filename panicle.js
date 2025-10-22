@@ -14,9 +14,9 @@
 
 // Get and parse the config file
 // import JSON5 from "./libs/json5/json5.min.js";
-import config from "./config.js";
+import config from "config";
+import navbar from "navbar";
 import {Map, TileLayer, LayerGroup, Control} from 'leaflet';
-import navbar from "./navbar.js";
 import SVGMarker from "./js/SVGMarker.js";
 
 async function Ajax(method, url) {
