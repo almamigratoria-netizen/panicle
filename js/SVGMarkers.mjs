@@ -2,12 +2,12 @@
 // SVGMarkers.js
 //
 // ESM for Leaflet v2 to create css styled SVG markers.
+// No DivIcons, no <img> tags, no dependencies
+// ... and so far no shadows, but I'm working on it.
 //
 // default export is the SVGMarker class.  
 // also available are SVGIcon and SVGMarkerUtil
 //
-// I learned that SVG's in <img> tags can't use external <use> or external CSS
-// That's sad.   
 // This module was created not so much because I really like SVG's, but
 // more so that I could learn a little bit about how SVG's work and a bit
 // about extending leaflet v2
@@ -16,7 +16,7 @@
 // Trust the importmap, I guess
 import {Marker, Icon, LatLng, Util} from 'leaflet';
 
-class SVGMarker extends Marker {
+export class SVGMarker extends Marker {
     initialize(latlng, options) {
         this.name = SVGMarker;
         Util.setOptions(this, options);
@@ -35,8 +35,10 @@ class SVGMarker extends Marker {
 // module load so changing this changes the default icon
 const default_svgText = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 41" class="leaflet-zoom-animated leaflet-interactive leaflet-SVGIcon" style="width:25px">
-  <path d="M12.4 0C5.6 0-.02 5.76-.02 12.7-.02 15.12.4501 17.28 1.6 19.2L12.4 38.4 23.2 19.2C24.4 17.38 24.9 15.12 24.88 12.72 24.88 5.8 19.2 0 12.4 0z" />
-  <circle class="markerDot" cx="12.5" cy="12.5" r="5"/>
+  <g>
+    <path d="M12.4 0C5.6 0-.02 5.76-.02 12.7-.02 15.12.4501 17.28 1.6 19.2L12.4 38.4 23.2 19.2C24.4 17.38 24.9 15.12 24.88 12.72 24.88 5.8 19.2 0 12.4 0z" />
+    <circle class="markerDot" cx="12.5" cy="12.5" r="5"/>
+  </g>
 </svg>
 `;
 
@@ -54,6 +56,7 @@ const ourCSS = `
   stroke: blue;
   width: 25px;
   height: 41px;
+  /* filter: drop-shadow(5px -5px 5px rgba(0, 0, 0, 0.6)); */
 }
 .leaflet-SVGIcon .markerDot {
   fill:white;
@@ -65,6 +68,15 @@ span.SVGIconGlyph {
   position: relative;
   display: inline-block;
 }
+svg.SVGMarkerShadow {
+  opacity: 0.5;
+  filter: blur(3.5px);
+  top: -41px; 
+}
+.SVGMarkerShadow path {
+  stroke: #666;
+  fill: #666;
+}
 `;
 ////////////////////////////////////////////////////////////////////
 //
@@ -74,9 +86,18 @@ span.SVGIconGlyph {
 // gets filled in by module init code
 let default_SVGIcon = undefined;
 
-// gets populated by module init code.  Will include shadows
-// for default icon and all defined extra_paths
-const SVGIconShadows = {};
+// Wanted to do this by injecting a rotate and blur filter into
+// the default and shaped icons, then save the result.  The problem
+// is they display great when I save one and open it, but don't display
+// well in the browser when constructed and cloned.  I may work on that....
+// So for now the blur is happening in CSS.  Not so bad, let's us style
+// them.
+const SVGIconsPreRotatedPaths = {
+    default: 'M27.3 3.7C22.5-1.1 14.4-1 9.5 3.9 7.8 5.6 6.6 7.5 6.1 9.6L.1 30.8 21.3 24.9C23.5 24.5 25.4 23.2 27.1 21.5 32 16.6 32.1 8.5 27.3 3.7z',
+};
+// gets populated by module init code. 
+const SVGIconShadows = {
+}
 
 const defaultOptions = {  // same as L.Icon
     iconSize:    [25, 41],
@@ -87,30 +108,62 @@ const defaultOptions = {  // same as L.Icon
 };
 
 class SVGMarkerUtil {
+    // append SVG <def>'s to the DOM so we can use them for
+    // gradients and transforms etc.
     static svgExport(svg=null) {
+        svg = null;
+        // PLACEHOLDER FOR NOW.
         // deserialize if necessary,
         // wrap in <svg> tag if all they gave us was a <def> or gradient
         // append to DOM
-        return null;
+        return svg;
     }
 
+    // Trying to apply color, gaussian blur, rotate to get
+    // a shadow of an SVG, but the browser isn't rendering the
+    // blur, and there seems to be some strange interaction between
+    // CSS transforms applied by leaflet and SVG transforms.
     static svgCreateShadow(shape, icon) {
         console.log(`Creating shadow for ${shape}`);
         SVGIconShadows[shape] = undefined;
-        // add attribute 'transform' to icon, rotate(angle, cx, cy)
-        // change colors to dull gray
-        // add blur
-        // probably want some opacity
+        const rpath = SVGIconsPreRotatedPaths[shape];
+        let a = icon.cloneNode(true);
+        // use these two lines until we get the BBox working
+        a.setAttribute('viewBox', '0 0 31 31');
+        a.style.width = 31;
+        a.querySelector('circle').remove();
+//        let b = `
+//<defs>
+//  <filter id="blurMe" width="0" height="0">
+//    <feGaussianBlur in="SourceGraphic" stdDeviation="3"></feGaussianBlur>
+//  </filter>
+//</defs>
+//`;
+//        const filter = SVGMarkerUtil.svgDeserialize(b);
+//        a.prepend(filter);
+        const pathEl = a.querySelector('path');
+        pathEl.setAttribute('d', rpath);
+        // bbox apparently only works when the element is added to the DOM
+        // maybe try shadowDom?
+        //let bbox = a.getBBox();
+        //bbox = pathEl.getBBox();
+        //a.setAttribute('viewbox', `0 0 ${bbox.width} ${bbox.height}`);
+        //a.setAttribute('width', bbox.width);
+        //a.style.width = bbox.width;
+        //a.setAttribute('height', bbox.height);
+        a.classList.add('SVGMarkerShadow');
+        SVGIconShadows[shape] = a;
     }
 
     static serializeSVG(svgElement) {
-        // check if arg === element.  Could also allow selectors.
+        // check if arg === element.  Could also allow selectors?
         const serializer = new XMLSerializer();
         const svgString = serializer.serializeToString(svgElement);
         return svgString;
     }
 
     // Create a dataURL from an SVG for use as img.src (not unicode safe!)
+    // We no longer use this. SVG's in <img>'s can be styled
     static svgToDataURL(inputSVG) {
         if (inputSVG instanceof SVGSVGElement) {
             inputSVG = SVGMarkerUtil.serializeSVG(inputSVG);
@@ -120,52 +173,54 @@ class SVGMarkerUtil {
         return s;
     }
 
-    static svgDeserialize(inputSVG) {
-        // NOTE:  Remove next line for production
-            return SVGMarkerUtil.kludge_svgDeserializer(inputSVG);
+    // SVG's have a large attack surface.  Sanitize your inputs.
+    // svgDeserialize attempts to use DOMParser to deserialize the strings,
+    // but falls back to a hand-rolled simple deserializer if DOMParser
+    // throws an Error (probably because of your CSP).  This simple
+    // fallback deserializer is sufficient for the provided icons, but
+    // may or may not work on SVG's with more than the basic SVG 
+    // element tags. 
+    static svgDeserialize(inputSVG, cullTextNodes=true) {
+        // return SVGMarkerUtil.kludge_svgDeserializer(inputSVG);
+        let SVGElement = null;
         try {
             const Dp = new DOMParser();
             const svgDoc = Dp.parseFromString(inputSVG, 'image/svg+xml');
             const errorNode = svgDoc.querySelector("parsererror");
             if (errorNode) {
                 console.log("DOMParser error:", JSON.stringify(errorNode));
-                return null;
+                return SVGElement;
             }
-            return svgDoc.documentElement;
+            SVGElement = svgDoc.documentElement;
         } catch(e) {
-            console.warn("svgDeserialize:", e);
-            console.warn("You might need TrustedHTML");
-            console.log(e.message);
-            return SVGMarkerUtil.kludge_svgDeserializer(inputSVG);
+            console.warn(`svgDeserialize: ${e.name} ${e.message}`);
+            console.warn("You might want to pass TrustedHTML");
+            SVGElement = SVGMarkerUtil.kludge_svgDeserializer(inputSVG);
         }
+        // When passing SVG's as strings, there are usually newlines
+        // These might generate text nodes in the final SVG.  Not needed.
+        // But maybe you *want* text nodes, so we have the option.
+        if (cullTextNodes) {
+            let children = Array.from(SVGElement.childNodes);
+            for (let node of children) {
+                if (node.nodeType == Node.TEXT_NODE) {
+                    SVGElement.removeChild(node);
+                }
+            }
+        }
+        return SVGElement;
     }
 
     // This is a kludge.  You really can't parse XML with regex.
-    // But it was fun to build.
-    static kludge_svgDeserializer(svgString, options={}) {
-        // Regex unescaper
-        function unescapeRegexString(escapedString) {
-          // Unescape common regex special characters
-          let u = escapedString.replace(/\\([.*+?()[\]{}|^$])/g, '$1');
-          // Unescape forward slashes
-          u = u.replace(/\\\//g, '/');
-          // Unescape escaped backslashes (\\ becomes \)
-          u = u.replace(/\\\\/g, '\\');
-          // Unescape hex encoding
-          u = u.replace(/\\x([0-9A-Fa-f]{2})/g, function(match, hex) {
-              return String.fromCharCode(parseInt(hex, 16));
-          });
-          return u;
-        }
-
+    // But it'll work for our markers, and it was fun to build.
+    static kludge_svgDeserializer(svgString) {
         // Use a stack instead of recursion.  Might refactor it later. 
-        //
         let tagStack = []; 
-        // /<(\w+)([^>]*)>.*?</\1>/   (Doesn't match self-closers)
+        // eslint-disable-next-line no-useless-escape 
         const re_tag = /<\s*(?<tagclose>[\/])?\s*(?<tag>\/?\w+)\s*(?<attribs>[^>]*)?>/g;
 
-        // ideally our re_tag would detect self-closers as well.
         const re_attrib = /((?<key>\w+)\s*=\s*(?<value>(['"])[^'"]*?\4))/g;
+        // ideally, our re_tag would detect self-closers as well.
         const re_selfClose = /\/\s*>/;
         let match = svgString.matchAll(re_tag);
         const allMatches = Array.from(match);
@@ -206,15 +261,11 @@ class SVGMarkerUtil {
         }
         return el;
     }
-    // Do we need an svgExport function?  To wrap <def>'s
-    // and append them to the DOM?
 }
 
 
 class SVGIcon extends Icon {
-
-    // Build the icon from (mostly) scratch.  May need to rework it a tad
-    // if we start adding shaped icons like ExtraMarkers had.
+    // Build the icon from (mostly) scratch.
     _createSVGIcon(options) {
         let icon = default_SVGIcon.cloneNode(true);
         let ignore_these_keys = [
@@ -222,7 +273,7 @@ class SVGIcon extends Icon {
             'glyphColor', 'glyphPrefix', 'imageOpts',
             // L.Marker options we can ignore (Marker will handle them)
             'keyboard', 'title', 'alt', 'zIndexOffset', 'opacity', 
-            'raisoOnHover', 'pane', 'shadowPane', 'bubblingPointerEvents',
+            'raiseOnHover', 'pane', 'shadowPane', 'bubblingPointerEvents',
             'autoPanOnFocus'
         ];
         for (const [key, value] of Object.entries(options)) {
@@ -266,6 +317,7 @@ class SVGIcon extends Icon {
                 if (typeof v === 'string' && v.trim().match(/^<svg.*>/)) {
                     v = SVGMarkerUtil.svgToDataURL(v);
                 }
+                // eslint-disable-next-line no-useless-escape
                 if (v.match(/^[\.\/]/)) { // they gave us a relative URL
                     let a = document.createElement('a');
                     a.setAttribute('href', v);
@@ -352,8 +404,12 @@ class SVGIcon extends Icon {
 
 
     createShadow(args) {
+        console.log("createShadow args = ", args);
         const shape = this.options['shape'] || 'default';
-        return SVGIconShadows[shape]; 
+        let a = SVGIconShadows[shape].cloneNode(true);
+        // Do we need to attach some attributes to this ??
+        // Like so we don't translate it down?
+        return a; 
     }
 
     initialize(options) {
@@ -387,7 +443,7 @@ export {SVGMarker as default, SVGIcon, SVGMarkerUtil};
     }
 
     _writeCSS();    
-    default_SVGIcon = SVGMarkerUtil.svgDeserialize(default_svgText);
+    default_SVGIcon = SVGMarkerUtil.svgDeserialize(default_svgText, true);
     _create_shadows();
 })();
 
