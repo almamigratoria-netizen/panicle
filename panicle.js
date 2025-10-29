@@ -17,7 +17,7 @@
 import config from "config";
 import navbar from "navbar";
 import {Map, TileLayer, LayerGroup, Control} from 'leaflet';
-import SVGMarker from "./js/SVGMarker.js";
+import SVGMarker from "./js/SVGMarker.mjs";
 
 async function Ajax(method, url) {
     // ROADMAP:  Add a timeout (AbortController)
