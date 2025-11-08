@@ -2,6 +2,7 @@
 // Options are covered in the file "README.md" in this directory
 
 {
+    Category: "Food",
     defaultMarker: {
         glyph: 'bx-pizza-alt',
         color: 'red',

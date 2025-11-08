@@ -18,6 +18,7 @@ import config from "config";
 import navbar from "navbar";
 import {Map, TileLayer, LayerGroup, Control} from 'leaflet';
 import SVGMarker from "./js/SVGMarkers.mjs";
+import LayersTree from 'LayersTree';
 
 async function Ajax(method, url) {
     // ROADMAP:  Add a timeout (AbortController)
@@ -47,18 +48,14 @@ async function Load_Data(key, s) {
     //         ... and of course add a grouped layer ctrl
     try {
         let o = await Ajax('GET', s);
-        let CategoryArray = []
-        if (o.Category) {
-        }
-
 
         let markerArray = [];
-
         const defaultMarker = o.defaultMarker || {};
 
         for (const item in o) {
             // This isn't a marker, so move on
             if (item == "defaultMarker") { continue; };
+            if (item == "Category") { continue; };
             let d = o[item];
 
             // the "marker" option
@@ -78,7 +75,11 @@ async function Load_Data(key, s) {
             // Once we have the marker built, add it to our array
             markerArray.push(m);
         }
-        return new LayerGroup(markerArray);
+        const LGroup = new LayerGroup(markerArray);
+        if (o.Category) {
+            LGroup._LTgroup = o.Category;
+        }
+        return LGroup;
     } catch(e) {
         console.error(`Load_Data(${key},${s}): error ${e.message}: stack ${e.stack}`);
     }
@@ -140,6 +141,7 @@ async function Load_Map() {
         for (var key in config.GeoJSON) {
             let layer = await Load_geoJSON(key, config.GeoJSON[key]);
             if (layer && Object.keys(layer).length) {
+                layer._LTgroup = "Bus Routes";
                 lgo[key] = layer;
             }
         }
@@ -150,7 +152,8 @@ async function Load_Map() {
             collapsed: !!(navigator.maxTouchPoints > 0),
             hideSingleBase: true,
         };
-        const layersControl = new Control.Layers(null, lgo, opts);
+        //const layersControl = new Control.Layers(null, lgo, opts);
+        const layersControl = new LayersTree(null, lgo, opts);
         layersControl.addTo(map);
     }
     return map;

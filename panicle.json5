@@ -23,39 +23,43 @@
     // These data files get loaded in and parsed to populate the map
     // For details on the options, see ./data/README.md
     Data: {
-    //  Comida: {
-    //    Pizza: "data/pizza.json",
-    //    Burgers: "data/burgers.json",
-    //    SuperMarkets: "data/supers.json",
-    //  },
       Pizza: "data/pizza.json",
       Burgers: "data/burgers.json",
       SuperMarkets: "data/supers.json"
     },
     GeoJSON: {
-      "Bus #38":  {
-        style: { color: "#ff7800", weight: 4, opacity: 0.8, },
-        file: "./data/bus_routes/Bus-38.json",
-      },
       "Bus 2y7 (Botanico)":  {
         style: { color: "#000077", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-2y7.json",
       },
-      "Bus 30 (delSol)":  {
-        style: { color: "#0000ff", weight: 5, opacity: 0.7, },
-        file: "./data/bus_routes/Bus-30.json",
+      "Bus 11 (Aregua)":  {
+        style: { color: "#660066", weight: 5, opacity: 0.7, },
+        file: "./data/bus_routes/Bus-11.json",
       },
-      "Bus 15 (Shopping Mariscal)":  {
+      "Bus 15-2 (Terminal)":  {
+        style: { color: "yellow", weight: 5, opacity: 0.7, },
+        file: "./data/bus_routes/Bus-15-2.json",
+      },
+      "Bus 15-3 (Shopping Mariscal)":  {
         style: { color: "yellow", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-15-3.json",
+      },
+      "Bus 21":  {
+        style: { color: "#660066", weight: 5, opacity: 0.7, },
+        file: "./data/bus_routes/Bus-21.json",
       },
       "Bus 23":  {
         style: { color: "#660066", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-23.json",
       },
-      "Bus 11 (Aregua)":  {
-        style: { color: "#660066", weight: 5, opacity: 0.7, },
-        file: "./data/bus_routes/Bus-11.json",
+      "Bus 26": { file: "./data/bus_routes/Bus-26.json", },
+      "Bus 30 (delSol)":  {
+        style: { color: "#0000ff", weight: 5, opacity: 0.7, },
+        file: "./data/bus_routes/Bus-30.json",
+      },
+      "Bus #38":  {
+        style: { color: "#ff7800", weight: 4, opacity: 0.8, },
+        file: "./data/bus_routes/Bus-38.json",
       },
     },
     // These become the items on the dropdown titled "Links" on the navbar
@@ -66,7 +70,7 @@
       //}
       "Panicle on Github": {
         url: "https://github.com/almamigratoria-netizen/panicle",
-        tooltip: "I'm a hoopy frood",
+        tooltip: "This project on GitHub",
       },
       "Example.com": {
         url: "https://www.example.com",

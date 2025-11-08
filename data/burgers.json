@@ -1,6 +1,7 @@
 // 
 // Burger places in a 15 minute walk from Hostel Patagonia
 {
+  Category: "Food",
   defaultMarker: {
       glyph: 'bx-burger-alt',
       color: 'blue',
