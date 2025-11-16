@@ -1,7 +1,7 @@
 //
 // navbar.js
 //
-// Code for handling the items on the navbar (dropdown, search, etc)
+// Code for handling the items on the navbar (dropdown, etc)
 // Returns an object holding public methods
 // Side effect of attaching click handlers to whatever items you
 // code in here.
@@ -17,8 +17,8 @@ const navbar = (function() {
           document.getElementById("item1").addEventListener("click", item1);
           document.getElementById("item2").addEventListener("click", item2);
           // notice that we're not attaching a click to item3.
-          let el = document.getElementById("searchbutton");
-          if (el) { el.addEventListener("click", searchbutton); }
+          // let el = document.getElementById("searchbutton");
+          // if (el) { el.addEventListener("click", searchbutton); }
           document.getElementById("about").addEventListener("click", about);
         } catch(e) {
           console.error(e);
@@ -62,14 +62,14 @@ const navbar = (function() {
     };
 
     const about = function(e) {
-        if (!e.target) {return;}
+        if (!e.target) { return; }
         console.log(e.target.textContent.trim(), " clicked")
     };
 
-    const searchbutton = function(e) {
-        if (!e.target) {return;}
-        console.log(e.target.textContent.trim(), " clicked")
-    };
+    // const searchbutton = function(e) {
+    //    if (!e.target) { return; }
+    //    console.log(e.target.textContent.trim(), " clicked")
+    // };
 
     setup();
 
@@ -78,7 +78,7 @@ const navbar = (function() {
     return { // (probably useless) list of the "I got clicked" functions.    
         item1: item1,
         item2: item2,
-        searchbutton: searchbutton,
+        // searchbutton: searchbutton,
         about: about,
     };
 })();
