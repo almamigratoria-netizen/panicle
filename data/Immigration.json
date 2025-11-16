@@ -1,0 +1,56 @@
+// Places you need to go for Immigration.
+
+{
+    defaultMarker: {
+        glyph: 'bx-desk',
+        color: 'blue',
+    },
+    Migracionses: {
+        Location: [-25.283563,-57.630938],
+        Link: "https://migraciones.com.py",
+    },
+    Interpol: {
+        marker: {
+            glyph: 'bx-man',
+        },
+        Location: [-25.280938,-57.650188],
+    },
+    Identificationes: {
+        Location: [-25.302188,-57.566063],
+        Link: "www.policianacional.gov.py",
+    },
+    "Comisaría 3ra": {
+        Location: "P966+F9 Asunción",
+    },
+//    "Escribania A": {
+//        marker: {},
+//        Location: [],
+//    },
+//    "Escribania B": {
+//        marker: {},
+//        Location: [],
+//    },
+//    "Escribania C": {
+//        marker: {},
+//        Location: [],
+//    },
+//    Photos1: {
+//        marker: {},
+//        Location: [],
+//    },
+//    Photos2: {
+//        marker: {},
+//        Location: [],
+//    },
+//    Translations1: {
+//        marker: {},
+//        Location: [],
+//    },
+//    Translations2: {
+//        marker: {},
+//        Location: [],
+//    },
+} 
+
+// vim: syntax=json5
+
