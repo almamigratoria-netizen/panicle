@@ -90,6 +90,28 @@ if (config.Logo) {
         el.innerHTML = config.Logo;
     }
 }
+// Is there a PluCodeRef?
+async function geolocate(query) {
+    NOSM='https://nominatim.openstreetmap.org/search'
+    let qs = encodeURIComponent(query);
+    const url = `${NOSM}?q=${qs}&format=jsonv2`;
+
+    try {
+        const response = await fetch(url);
+        const j = response.json();
+        return (j[0].lat, j[1].lon);
+    } catch (e) {
+        console.log(`${e.name} ${e.message}`);
+        return null;
+    }
+}
+try {
+    const j = await geolocate(config.PlusCodeRef);
+    if (j) {
+        config.PlusCodeRef = j;
+    }
+} catch (e) { };
+
 
 // Do the <title>
 if (config.Title) {
