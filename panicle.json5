@@ -25,7 +25,9 @@
     Data: {
       Pizza: "data/pizza.json",
       Burgers: "data/burgers.json",
-      SuperMarkets: "data/supers.json"
+      SuperMarkets: "data/supers.json",
+      Immigration: "data/Immigration.json",
+      Cafe: "data/Cafe.json5",
     },
     GeoJSON: {
       "Bus 2y7 (Botanico)":  {
@@ -44,10 +46,10 @@
         style: { color: "yellow", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-15-3.json",
       },
-      "Bus 21":  {
-        style: { color: "#660066", weight: 5, opacity: 0.7, },
-        file: "./data/bus_routes/Bus-21.json",
-      },
+      //"Bus 21":  {
+      //  style: { color: "#660066", weight: 5, opacity: 0.7, },
+      //  file: "./data/bus_routes/Bus-21.json",
+      //},
       "Bus 23":  {
         style: { color: "#660066", weight: 5, opacity: 0.7, },
         file: "./data/bus_routes/Bus-23.json",
