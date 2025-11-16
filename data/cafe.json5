@@ -1,0 +1,28 @@
+//
+//  Cafe.json5
+//      Local cafe's.  Should ground-truth this.
+//
+// Cafe Martinez
+// Juan Valdez Café
+// The Coffee Bean & Tea Leaf
+// Karuseando
+// Kaffetario
+
+{
+    Category: "Food",
+    defaultMarker: {
+        glyph: 'bx-coffee-cup',
+        color: 'brown',
+    },
+    "El Sultan Turco": {
+        Location: "P949+C3 Asuncion",
+    },
+    "Univeral Café": {
+        Location: "5864P989+69",
+    },
+    "Café Martínez": {
+        Location: "5864P988+MR",
+    },
+} 
+
+// vim: syntax=json5
